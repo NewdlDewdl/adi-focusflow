@@ -47,7 +47,7 @@ export default function SessionTimeline({
     return (
       <div
         style={{ width: "100%", height }}
-        className="rounded bg-gray-800/50"
+        className="rounded bg-warmBorder/50"
       />
     );
   }
@@ -62,7 +62,7 @@ export default function SessionTimeline({
     return (
       <div
         style={{ width: "100%", height }}
-        className="flex items-center justify-center rounded bg-gray-800/30 text-sm text-gray-500"
+        className="flex items-center justify-center rounded bg-warmBorder/30 text-sm text-warmBrownMuted"
       >
         No score data recorded
       </div>
@@ -113,10 +113,11 @@ export default function SessionTimeline({
 
         <Tooltip
           contentStyle={{
-            backgroundColor: "#1f2937",
-            border: "1px solid #374151",
+            backgroundColor: "#F5F2EB",
+            border: "1px solid #EBE5DA",
             borderRadius: "8px",
             fontSize: "12px",
+            color: "#43302B",
           }}
           labelFormatter={(val) => `Time: ${formatElapsed(val as number)}`}
           formatter={(value: number | undefined) => [`${Math.round(value ?? 0)}`, "Score"]}

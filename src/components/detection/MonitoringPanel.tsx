@@ -67,7 +67,7 @@ export default function MonitoringPanel({
       {/* Toggle button */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="mb-1 ml-auto block rounded bg-gray-800/80 px-2 py-1 text-gray-400 backdrop-blur-sm transition-colors hover:text-gray-200"
+        className="mb-1 ml-auto block rounded bg-warmSurface/80 px-2 py-1 text-warmBrownMuted backdrop-blur-sm transition-colors hover:text-warmBrown"
         aria-label={isOpen ? "Collapse monitoring panel" : "Expand monitoring panel"}
       >
         {isOpen ? "[-] Monitor" : "[+] Monitor"}
@@ -75,29 +75,29 @@ export default function MonitoringPanel({
 
       {/* Panel */}
       {isOpen && (
-        <div className="rounded-lg border border-gray-700 bg-gray-900/90 p-3 shadow-lg backdrop-blur-sm">
+        <div className="rounded-lg border border-warmBorder bg-warmBeige/90 p-3 shadow-lg backdrop-blur-sm">
           <div className="space-y-1.5">
             {/* FPS */}
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-500">FPS</span>
+              <span className="text-warmBrownMuted">FPS</span>
               <span className={fpsColor}>{fps}</span>
             </div>
 
             {/* Tensors */}
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-500">Tensors</span>
-              <span className="text-gray-300">{numTensors}</span>
+              <span className="text-warmBrownMuted">Tensors</span>
+              <span className="text-warmBrown">{numTensors}</span>
             </div>
 
             {/* Memory */}
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-500">Memory</span>
-              <span className="text-gray-300">{memoryMB} MB</span>
+              <span className="text-warmBrownMuted">Memory</span>
+              <span className="text-warmBrown">{memoryMB} MB</span>
             </div>
 
             {/* Status */}
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-500">Status</span>
+              <span className="text-warmBrownMuted">Status</span>
               <span className={`${statusColor} ${isLeaking ? "animate-pulse" : ""}`}>
                 {statusText}
               </span>
@@ -105,8 +105,8 @@ export default function MonitoringPanel({
 
             {/* Uptime */}
             <div className="flex items-center justify-between gap-4">
-              <span className="text-gray-500">Uptime</span>
-              <span className="text-gray-300">{uptime}</span>
+              <span className="text-warmBrownMuted">Uptime</span>
+              <span className="text-warmBrown">{uptime}</span>
             </div>
           </div>
 

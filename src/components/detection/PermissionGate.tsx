@@ -20,8 +20,8 @@ export default function PermissionGate({
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-700 border-t-blue-500" />
-          <p className="text-sm text-gray-400">Checking camera access...</p>
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-warmBorder border-t-warmCoral" />
+          <p className="text-sm text-warmBrownMuted">Checking camera access...</p>
         </div>
       </div>
     );
@@ -30,11 +30,11 @@ export default function PermissionGate({
   if (state === "prompt") {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
-        <div className="w-full max-w-md rounded-2xl border border-gray-800 bg-gray-900 p-8 shadow-2xl">
+        <div className="w-full max-w-md rounded-2xl border border-warmBorder bg-warmBeige p-8 shadow-2xl">
           <div className="mb-6 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-500/10">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-warmCoral/10">
               <svg
-                className="h-8 w-8 text-blue-400"
+                className="h-8 w-8 text-warmCoral"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
@@ -47,10 +47,10 @@ export default function PermissionGate({
                 />
               </svg>
             </div>
-            <h2 className="mb-2 text-xl font-bold text-white">
+            <h2 className="mb-2 text-xl font-bold text-warmBrown">
               FocusFlow needs camera access
             </h2>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-warmBrownMuted">
               We use your webcam to detect face direction and eye gaze. Video is
               processed entirely in your browser &mdash; it never leaves your
               device.
@@ -58,7 +58,7 @@ export default function PermissionGate({
           </div>
 
           <div className="mb-6 space-y-3">
-            <div className="flex items-start gap-3 rounded-lg bg-gray-800/50 p-3">
+            <div className="flex items-start gap-3 rounded-lg bg-warmSurface p-3">
               <svg
                 className="mt-0.5 h-5 w-5 shrink-0 text-green-400"
                 fill="none"
@@ -72,9 +72,9 @@ export default function PermissionGate({
                   d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
                 />
               </svg>
-              <span className="text-sm text-gray-300">No video recording</span>
+              <span className="text-sm text-warmBrown">No video recording</span>
             </div>
-            <div className="flex items-start gap-3 rounded-lg bg-gray-800/50 p-3">
+            <div className="flex items-start gap-3 rounded-lg bg-warmSurface p-3">
               <svg
                 className="mt-0.5 h-5 w-5 shrink-0 text-green-400"
                 fill="none"
@@ -88,11 +88,11 @@ export default function PermissionGate({
                   d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
                 />
               </svg>
-              <span className="text-sm text-gray-300">
+              <span className="text-sm text-warmBrown">
                 No data sent to servers
               </span>
             </div>
-            <div className="flex items-start gap-3 rounded-lg bg-gray-800/50 p-3">
+            <div className="flex items-start gap-3 rounded-lg bg-warmSurface p-3">
               <svg
                 className="mt-0.5 h-5 w-5 shrink-0 text-green-400"
                 fill="none"
@@ -106,7 +106,7 @@ export default function PermissionGate({
                   d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
                 />
               </svg>
-              <span className="text-sm text-gray-300">
+              <span className="text-sm text-warmBrown">
                 Camera can be stopped at any time
               </span>
             </div>
@@ -114,7 +114,7 @@ export default function PermissionGate({
 
           <button
             onClick={requestPermission}
-            className="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+            className="w-full rounded-xl bg-warmCoral px-4 py-3 text-sm font-semibold text-warmBeige transition-colors hover:bg-warmCoralLight focus:outline-none focus:ring-2 focus:ring-warmCoral focus:ring-offset-2 focus:ring-offset-warmBeige"
           >
             Enable Camera
           </button>
@@ -126,7 +126,7 @@ export default function PermissionGate({
   if (state === "denied" || state === "error") {
     return (
       <div className="flex min-h-screen items-center justify-center p-4">
-        <div className="w-full max-w-md rounded-2xl border border-gray-800 bg-gray-900 p-8 shadow-2xl">
+        <div className="w-full max-w-md rounded-2xl border border-warmBorder bg-warmBeige p-8 shadow-2xl">
           <div className="mb-6 text-center">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10">
               <svg
@@ -143,17 +143,17 @@ export default function PermissionGate({
                 />
               </svg>
             </div>
-            <h2 className="mb-2 text-xl font-bold text-white">
+            <h2 className="mb-2 text-xl font-bold text-warmBrown">
               Camera access required
             </h2>
-            <p className="text-sm text-red-300/80">
+            <p className="text-sm text-red-600/80">
               {error || "An unknown error occurred with camera access."}
             </p>
           </div>
 
           <button
             onClick={requestPermission}
-            className="w-full rounded-xl bg-gray-700 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+            className="w-full rounded-xl bg-warmBorder px-4 py-3 text-sm font-semibold text-warmBrown transition-colors hover:bg-warmBorder/70 focus:outline-none focus:ring-2 focus:ring-warmCoral focus:ring-offset-2 focus:ring-offset-warmBeige"
           >
             Try Again
           </button>

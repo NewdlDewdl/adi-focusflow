@@ -170,13 +170,13 @@ export default function DetectionProvider({
             {/* Progress bar - only during calibration */}
             {isInCalibrationPeriod && (
               <div className="space-y-2">
-                <div className="h-2 overflow-hidden rounded-full bg-gray-800 shadow-inner">
+                <div className="h-2 overflow-hidden rounded-full bg-warmBorder shadow-inner">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-75 ease-linear"
+                    className="h-full rounded-full bg-gradient-to-r from-warmCoral to-warmCoralLight transition-all duration-75 ease-linear"
                     style={{ width: `${calibrationProgress}%` }}
                   />
                 </div>
-                <p className="text-center text-sm text-gray-400">
+                <p className="text-center text-sm text-warmBrownMuted">
                   {calibrationProgress < 100 ? `Calibrating... ${Math.round(calibrationProgress)}%` : 'Calibration complete!'}
                 </p>
               </div>
@@ -191,17 +191,17 @@ export default function DetectionProvider({
                       faceDetected ? "bg-green-500" : "bg-gray-500"
                     }`}
                   />
-                  <span className="text-gray-300">
+                  <span className="text-warmBrown">
                     {faceDetected ? "Face detected" : "No face detected"}
                   </span>
                 </span>
 
                 {isReady && (
                   <>
-                    <span className="text-gray-500">|</span>
-                    <span className="font-mono text-gray-400">{fps} FPS</span>
-                    <span className="text-gray-500">|</span>
-                    <span className="font-mono text-gray-400">
+                    <span className="text-warmBrownMuted">|</span>
+                    <span className="font-mono text-warmBrownMuted">{fps} FPS</span>
+                    <span className="text-warmBrownMuted">|</span>
+                    <span className="font-mono text-warmBrownMuted">
                       {tensorCount} tensors
                     </span>
                   </>
@@ -214,7 +214,7 @@ export default function DetectionProvider({
                 {/* Session phase indicator */}
                 {sessionPhase === "paused" && (
                   <>
-                    <span className="text-gray-500">|</span>
+                    <span className="text-warmBrownMuted">|</span>
                     <span className="text-yellow-400 text-xs font-medium">SCORING PAUSED</span>
                   </>
                 )}
@@ -236,8 +236,8 @@ export default function DetectionProvider({
             <FocusScoreRing score={displayScore} size={200} strokeWidth={12} />
 
             {/* Sparkline */}
-            <div className="w-full rounded-lg border border-gray-800 bg-gray-900 p-3">
-              <p className="mb-2 text-xs font-medium text-gray-400">
+            <div className="w-full rounded-lg border border-warmBorder bg-warmSurface p-3">
+              <p className="mb-2 text-xs font-medium text-warmBrownMuted">
                 Score Trend
               </p>
               <FocusSparkline data={history} height={60} />

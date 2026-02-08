@@ -38,9 +38,9 @@ function scoreColor(value: number): string {
 export default function SessionHistory({ sessions }: SessionHistoryProps) {
   if (sessions.length === 0) {
     return (
-      <div className="rounded-xl border border-gray-800/50 bg-gray-900/50 p-8 text-center">
-        <Focus className="mx-auto mb-3 h-10 w-10 text-gray-700" />
-        <p className="text-sm text-gray-500">
+      <div className="rounded-xl border border-warmBorder/50 bg-warmSurface/50 p-8 text-center">
+        <Focus className="mx-auto mb-3 h-10 w-10 text-warmBrownMuted" />
+        <p className="text-sm text-warmBrownMuted">
           No sessions yet. Start your first focus session!
         </p>
       </div>
@@ -52,7 +52,7 @@ export default function SessionHistory({ sessions }: SessionHistoryProps) {
 
   return (
     <div className="space-y-1">
-      <h3 className="mb-2 text-sm font-medium text-gray-400">
+      <h3 className="mb-2 text-sm font-medium text-warmBrownMuted">
         Session History
       </h3>
       <div className="max-h-[400px] space-y-2 overflow-y-auto pr-1">
@@ -85,11 +85,11 @@ function SessionRow({ session }: { session: StoredSession }) {
   });
 
   return (
-    <div className="group flex items-center gap-3 rounded-lg border border-gray-800 bg-gray-900 p-3 transition-colors hover:border-gray-700">
+    <div className="group flex items-center gap-3 rounded-lg border border-warmBorder bg-warmSurface p-3 transition-colors hover:border-warmCoral/30">
       {/* Left: Date and time */}
       <div className="w-24 shrink-0">
-        <p className="text-sm font-medium text-gray-300">{dateStr}</p>
-        <p className="text-xs text-gray-500">{timeStr}</p>
+        <p className="text-sm font-medium text-warmBrown">{dateStr}</p>
+        <p className="text-xs text-warmBrownMuted">{timeStr}</p>
       </div>
 
       {/* Center: Mini timeline chart (hidden below lg breakpoint) */}
@@ -104,22 +104,22 @@ function SessionRow({ session }: { session: StoredSession }) {
       {/* Right: Key metrics */}
       <div className="flex shrink-0 items-center gap-4 text-right">
         <div>
-          <p className="text-sm font-medium text-gray-300">
+          <p className="text-sm font-medium text-warmBrown">
             {formatDuration(session.totalDurationMs)}
           </p>
-          <p className="text-xs text-gray-500">duration</p>
+          <p className="text-xs text-warmBrownMuted">duration</p>
         </div>
         <div>
           <p className={`text-sm font-medium ${scoreColor(session.averageScore)}`}>
             {Math.round(session.averageScore)}
           </p>
-          <p className="text-xs text-gray-500">avg score</p>
+          <p className="text-xs text-warmBrownMuted">avg score</p>
         </div>
         <div>
           <p className="text-sm font-medium text-blue-400">
             {Math.round(session.focusedPercentage)}%
           </p>
-          <p className="text-xs text-gray-500">focused</p>
+          <p className="text-xs text-warmBrownMuted">focused</p>
         </div>
       </div>
     </div>

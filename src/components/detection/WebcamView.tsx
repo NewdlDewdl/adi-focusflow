@@ -331,7 +331,7 @@ export default function WebcamView({
 
   return (
     <div
-      className="relative overflow-hidden rounded-2xl border border-gray-700 bg-gray-900 shadow-2xl"
+      className="relative overflow-hidden rounded-2xl border border-warmBorder bg-warmSurface shadow-2xl"
       data-testid="webcam-view"
       data-focus-score={focusScore}
       data-is-calibrated={isCalibrated}
@@ -370,7 +370,7 @@ export default function WebcamView({
       {/* Toggle video feed visibility */}
       <button
         onClick={() => setShowVideo((prev) => !prev)}
-        className="absolute right-2 top-2 z-10 rounded-lg bg-gray-800/80 px-2.5 py-1.5 text-xs font-medium text-gray-300 backdrop-blur-sm transition-colors hover:bg-gray-700/80 hover:text-white"
+        className="absolute right-2 top-2 z-10 rounded-lg bg-warmSurface/80 px-2.5 py-1.5 text-xs font-medium text-warmBrown backdrop-blur-sm transition-colors hover:bg-warmBorder/80 hover:text-warmBrown"
         aria-label={showVideo ? "Hide video feed" : "Show video feed"}
       >
         {showVideo ? "Hide Video" : "Show Video"}
@@ -379,7 +379,7 @@ export default function WebcamView({
       {/* Loading overlay */}
       {isLoading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="mb-4 h-10 w-10 animate-spin rounded-full border-4 border-gray-600 border-t-blue-400" />
+          <div className="mb-4 h-10 w-10 animate-spin rounded-full border-4 border-warmBorder border-t-warmCoral" />
           <p className="text-sm font-medium text-white">{loadingMessage}</p>
         </div>
       )}

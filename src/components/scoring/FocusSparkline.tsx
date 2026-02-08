@@ -35,7 +35,7 @@ export default function FocusSparkline({
           width: typeof width === 'number' ? width : '100%',
           height,
         }}
-        className="rounded bg-gray-800/50"
+        className="rounded bg-warmBorder/50"
       />
     );
   }

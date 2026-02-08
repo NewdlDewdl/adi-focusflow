@@ -39,7 +39,7 @@ export default function FocusScoreRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(255,255,255,0.1)"
+          stroke="rgba(67,48,43,0.1)"
           strokeWidth={strokeWidth}
         />
         {/* Progress arc */}
@@ -61,14 +61,14 @@ export default function FocusScoreRing({
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <motion.span
           key={Math.round(score)}
-          className="text-4xl font-bold text-white"
+          className="text-4xl font-bold text-warmBrown"
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 200, damping: 10 }}
         >
           {Math.round(score)}
         </motion.span>
-        <span className="text-sm text-gray-400">Focus Score</span>
+        <span className="text-sm text-warmBrownMuted">Focus Score</span>
       </div>
     </div>
   );

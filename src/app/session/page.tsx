@@ -22,8 +22,8 @@ const DetectionProvider = dynamic(
     loading: () => (
       <div className="flex min-h-[60vh] items-center justify-center">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600" />
-          <p className="text-sm text-gray-500">Loading FocusFlow...</p>
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-warmBorder border-t-warmCoral" />
+          <p className="text-sm text-warmBrownMuted">Loading FocusFlow...</p>
         </div>
       </div>
     ),
@@ -168,13 +168,13 @@ export default function SessionPage() {
   const showSummary = lastCompletedSession !== null;
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-warmBeige text-warmBrown">
       {/* Header */}
-      <header className="fixed left-0 top-0 z-40 w-full border-b border-gray-800/50 bg-gray-950/80 backdrop-blur-sm">
+      <header className="fixed left-0 top-0 z-40 w-full border-b border-warmBorder/50 bg-warmBeige/80 backdrop-blur-sm">
         <div className="mx-auto flex h-12 max-w-4xl items-center px-4">
           <h1 className="text-lg font-bold tracking-tight">
-            <span className="text-blue-400">Focus</span>
-            <span className="text-white">Flow</span>
+            <span className="text-warmCoral">Focus</span>
+            <span className="text-warmBrown">Flow</span>
           </h1>
         </div>
       </header>
@@ -209,7 +209,7 @@ export default function SessionPage() {
 
             {/* Too short message */}
             {tooShortMessage && (
-              <div className="mx-auto max-w-md rounded-lg border border-yellow-800/50 bg-yellow-900/20 px-4 py-2 text-center text-sm text-yellow-400">
+              <div className="mx-auto max-w-md rounded-lg border border-warmBorder bg-warmSurface px-4 py-2 text-center text-sm text-warmCoral">
                 {tooShortMessage}
               </div>
             )}

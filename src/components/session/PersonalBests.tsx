@@ -44,14 +44,14 @@ export default function PersonalBests({ bests }: PersonalBestsProps) {
   return (
     <div className="flex gap-3">
       {/* Best Score */}
-      <div className="min-w-0 flex-1 rounded-lg border border-gray-800 bg-gray-900 p-3">
+      <div className="min-w-0 flex-1 rounded-lg border border-warmBorder bg-warmSurface p-3">
         <div className="mb-1 flex items-center gap-1.5">
           <Trophy className="h-4 w-4 text-yellow-400" />
-          <span className="text-xs text-gray-500">Best Score</span>
+          <span className="text-xs text-warmBrownMuted">Best Score</span>
         </div>
         <p
           className={`text-xl font-bold ${
-            hasScore ? scoreColor(bests.highestScore) : "text-gray-600"
+            hasScore ? scoreColor(bests.highestScore) : "text-warmBrownMuted"
           }`}
         >
           {hasScore ? Math.round(bests.highestScore) : "--"}
@@ -59,14 +59,14 @@ export default function PersonalBests({ bests }: PersonalBestsProps) {
       </div>
 
       {/* Longest Focus */}
-      <div className="min-w-0 flex-1 rounded-lg border border-gray-800 bg-gray-900 p-3">
+      <div className="min-w-0 flex-1 rounded-lg border border-warmBorder bg-warmSurface p-3">
         <div className="mb-1 flex items-center gap-1.5">
           <Brain className="h-4 w-4 text-purple-400" />
-          <span className="text-xs text-gray-500">Longest Focus</span>
+          <span className="text-xs text-warmBrownMuted">Longest Focus</span>
         </div>
         <p
           className={`text-xl font-bold ${
-            hasFocus ? "text-purple-300" : "text-gray-600"
+            hasFocus ? "text-purple-600" : "text-warmBrownMuted"
           }`}
         >
           {hasFocus ? formatDuration(bests.longestFocusStreakMs) : "--"}
@@ -74,14 +74,14 @@ export default function PersonalBests({ bests }: PersonalBestsProps) {
       </div>
 
       {/* Longest Session */}
-      <div className="min-w-0 flex-1 rounded-lg border border-gray-800 bg-gray-900 p-3">
+      <div className="min-w-0 flex-1 rounded-lg border border-warmBorder bg-warmSurface p-3">
         <div className="mb-1 flex items-center gap-1.5">
           <Clock className="h-4 w-4 text-blue-400" />
-          <span className="text-xs text-gray-500">Longest Session</span>
+          <span className="text-xs text-warmBrownMuted">Longest Session</span>
         </div>
         <p
           className={`text-xl font-bold ${
-            hasSession ? "text-blue-300" : "text-gray-600"
+            hasSession ? "text-blue-600" : "text-warmBrownMuted"
           }`}
         >
           {hasSession ? formatDuration(bests.longestSessionMs) : "--"}

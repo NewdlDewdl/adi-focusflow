@@ -55,7 +55,7 @@ export default function StatCards({
         : average >= 40
           ? 'text-yellow-400'
           : 'text-red-400'
-      : 'text-gray-500';
+      : 'text-warmBrownMuted';
 
   return (
     <div className="grid grid-cols-3 gap-3">
@@ -80,8 +80,8 @@ function Card({
   valueClass?: string;
 }) {
   return (
-    <div className="rounded-lg border border-gray-800 bg-gray-900 p-4">
-      <p className="text-sm text-gray-400">{label}</p>
+    <div className="rounded-lg border border-warmBorder bg-warmSurface p-4">
+      <p className="text-sm text-warmBrownMuted">{label}</p>
       <p className={cn('text-2xl font-bold', valueClass)}>{value}</p>
     </div>
   );

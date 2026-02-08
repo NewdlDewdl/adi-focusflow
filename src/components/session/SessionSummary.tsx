@@ -48,9 +48,9 @@ export default function SessionSummary({
   newBests,
 }: SessionSummaryProps) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-warmBrown/40 backdrop-blur-sm">
       <motion.div
-        className="mx-4 w-full max-w-lg rounded-xl border border-gray-800 bg-gray-900 p-6 shadow-2xl"
+        className="mx-4 w-full max-w-lg rounded-xl border border-warmBorder bg-warmBeige p-6 shadow-2xl"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
@@ -58,7 +58,7 @@ export default function SessionSummary({
         {/* Header */}
         <div className="mb-5 flex items-center gap-3">
           <CheckCircle2 className="h-7 w-7 text-green-400" />
-          <h2 className="text-xl font-bold text-white">Session Complete</h2>
+          <h2 className="text-xl font-bold text-warmBrown">Session Complete</h2>
         </div>
 
         {/* Stats grid 2x2 */}
@@ -90,8 +90,8 @@ export default function SessionSummary({
         </div>
 
         {/* Timeline chart */}
-        <div className="mb-5 rounded-lg border border-gray-800 bg-gray-950 p-3">
-          <p className="mb-2 text-xs font-medium text-gray-400">
+        <div className="mb-5 rounded-lg border border-warmBorder bg-warmSurface p-3">
+          <p className="mb-2 text-xs font-medium text-warmBrownMuted">
             Focus Timeline
           </p>
           <SessionTimeline
@@ -103,13 +103,13 @@ export default function SessionSummary({
 
         {/* Personal best callout */}
         {newBests && newBests.length > 0 && (
-          <div className="mb-5 rounded-lg border border-yellow-800/50 bg-yellow-900/20 px-4 py-3">
-            <p className="text-sm font-semibold text-yellow-400">
+          <div className="mb-5 rounded-lg border border-warmCoral/30 bg-warmCoral/10 px-4 py-3">
+            <p className="text-sm font-semibold text-warmCoral">
               New Personal Best{newBests.length > 1 ? "s" : ""}!
             </p>
             <ul className="mt-1 space-y-0.5">
               {newBests.map((best) => (
-                <li key={best} className="text-xs text-yellow-300/80">
+                <li key={best} className="text-xs text-warmCoral/80">
                   {best}
                 </li>
               ))}
@@ -120,7 +120,7 @@ export default function SessionSummary({
         {/* Done button */}
         <button
           onClick={onDismiss}
-          className="w-full rounded-lg bg-gray-800 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-700"
+          className="w-full rounded-lg bg-warmCoral py-2.5 text-sm font-medium text-warmBeige transition-colors hover:bg-warmCoralLight"
         >
           Done
         </button>
@@ -144,12 +144,12 @@ function StatCard({
   valueClass?: string;
 }) {
   return (
-    <div className="rounded-lg border border-gray-800 bg-gray-950 p-3">
+    <div className="rounded-lg border border-warmBorder bg-warmSurface p-3">
       <div className="mb-1 flex items-center gap-1.5">
         {icon}
-        <span className="text-xs text-gray-500">{label}</span>
+        <span className="text-xs text-warmBrownMuted">{label}</span>
       </div>
-      <p className={`text-2xl font-bold ${valueClass ?? "text-white"}`}>
+      <p className={`text-2xl font-bold ${valueClass ?? "text-warmBrown"}`}>
         {value}
       </p>
     </div>
