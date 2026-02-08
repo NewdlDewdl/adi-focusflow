@@ -1,10 +1,13 @@
 "use client";
 
+import { useRef } from "react";
 import { useWebcamPermission } from "@/hooks/useWebcamPermission";
 import { useHumanDetection } from "@/hooks/useHumanDetection";
+import { useTensorMonitor } from "@/hooks/useTensorMonitor";
 import PermissionGate from "@/components/detection/PermissionGate";
 import PrivacyIndicator from "@/components/detection/PrivacyIndicator";
 import WebcamView from "@/components/detection/WebcamView";
+import MonitoringPanel from "@/components/detection/MonitoringPanel";
 
 export default function DetectionProvider() {
   const { state, error, videoRef, requestPermission } = useWebcamPermission();
@@ -17,6 +20,13 @@ export default function DetectionProvider() {
     isReady,
     humanRef,
   } = useHumanDetection(videoRef);
+  const { numTensors, numBytes, isLeaking } = useTensorMonitor(humanRef);
+
+  // Track when detection becomes ready for uptime calculation
+  const detectionStartRef = useRef<number | null>(null);
+  if (isReady && detectionStartRef.current === null) {
+    detectionStartRef.current = Date.now();
+  }
 
   const faceDetected = result !== null && result.faces.length > 0;
 
@@ -67,6 +77,17 @@ export default function DetectionProvider() {
           )}
         </div>
       </div>
+
+      {/* Performance monitoring panel */}
+      {isReady && (
+        <MonitoringPanel
+          fps={fps}
+          numTensors={numTensors}
+          numBytes={numBytes}
+          isLeaking={isLeaking}
+          detectionStartTime={detectionStartRef.current}
+        />
+      )}
     </PermissionGate>
   );
 }
