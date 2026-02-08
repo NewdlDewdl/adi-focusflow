@@ -63,6 +63,9 @@ export function useWebcamPermission(): PermissionResult {
         },
       });
       streamRef.current = stream;
+      // Attach stream to video element if it already exists.
+      // If not mounted yet (PermissionGate hasn't rendered children),
+      // the effect below will attach it once the video element appears.
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
@@ -102,6 +105,33 @@ export function useWebcamPermission(): PermissionResult {
       }
     }
   }, []);
+
+  // Attach stream to video element once it mounts.
+  // This handles the race condition where getUserMedia resolves and sets
+  // state to "granted", but the <video> element inside PermissionGate's
+  // children hasn't rendered yet. A MutationObserver-style polling ensures
+  // the stream gets connected once the ref is populated.
+  useEffect(() => {
+    if (state !== "granted" || !streamRef.current) return;
+
+    const attachStream = () => {
+      if (videoRef.current && !videoRef.current.srcObject) {
+        videoRef.current.srcObject = streamRef.current;
+        return true;
+      }
+      return false;
+    };
+
+    // Try immediately (ref may already be set)
+    if (attachStream()) return;
+
+    // Poll briefly for the video element to mount (PermissionGate re-render)
+    const timer = setInterval(() => {
+      if (attachStream()) clearInterval(timer);
+    }, 50);
+
+    return () => clearInterval(timer);
+  }, [state, videoRef]);
 
   // Cleanup: stop all tracks on unmount
   useEffect(() => {

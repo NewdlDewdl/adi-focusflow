@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import type Human from "@vladmandic/human";
 import type { DetectionResult } from "@/lib/detection-types";
 
@@ -27,6 +27,7 @@ export default function WebcamView({
   fps,
 }: WebcamViewProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [showVideo, setShowVideo] = useState(true);
 
   // Draw detection overlay whenever result changes
   useEffect(() => {
@@ -108,13 +109,15 @@ export default function WebcamView({
 
   return (
     <div className="relative overflow-hidden rounded-2xl border border-gray-700 bg-gray-900 shadow-2xl">
-      {/* Video feed */}
+      {/* Video feed -- always in DOM for detection, visibility toggled */}
       <video
         ref={videoRef}
         autoPlay
         playsInline
         muted
-        className="block h-auto w-full max-w-[640px] -scale-x-100"
+        className={`block h-auto w-full max-w-[640px] -scale-x-100 ${
+          showVideo ? "" : "invisible"
+        }`}
       />
 
       {/* Canvas overlay for detection drawings */}
@@ -122,6 +125,15 @@ export default function WebcamView({
         ref={canvasRef}
         className="pointer-events-none absolute left-0 top-0 h-full w-full"
       />
+
+      {/* Toggle video feed visibility */}
+      <button
+        onClick={() => setShowVideo((prev) => !prev)}
+        className="absolute right-2 top-2 z-10 rounded-lg bg-gray-800/80 px-2.5 py-1.5 text-xs font-medium text-gray-300 backdrop-blur-sm transition-colors hover:bg-gray-700/80 hover:text-white"
+        aria-label={showVideo ? "Hide video feed" : "Show video feed"}
+      >
+        {showVideo ? "Hide Video" : "Show Video"}
+      </button>
 
       {/* Loading overlay */}
       {isLoading && (
