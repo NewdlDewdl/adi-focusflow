@@ -8,6 +8,17 @@
 import type { DetectionResult } from "@/lib/detection-types";
 
 // ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+/**
+ * Human.js gaze bearing is centered at ~PI/2 radians (~90 degrees) when
+ * looking straight ahead, NOT at 0 degrees. gazeBearingDeg values from
+ * extractFocusInput represent deviation from this center (0 = at camera).
+ */
+export const GAZE_CENTER_DEG = 90;
+
+// ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
@@ -15,7 +26,7 @@ import type { DetectionResult } from "@/lib/detection-types";
 export interface FocusInput {
   yawDeg: number; // Head yaw in degrees (0 = centered)
   pitchDeg: number; // Head pitch in degrees (0 = centered)
-  gazeBearingDeg: number; // Gaze bearing in degrees (absolute value)
+  gazeBearingDeg: number; // Gaze deviation from center in degrees (0 = looking at camera)
   gazeStrength: number; // Gaze strength/confidence (0-1)
   faceDetected: boolean; // Whether a face was detected this frame
 }
@@ -51,15 +62,15 @@ export interface EMAState {
 // ---------------------------------------------------------------------------
 
 export const DEFAULT_FOCUS_CONFIG: FocusConfig = {
-  headPoseWeight: 0.5,
-  gazeWeight: 0.4,
-  facePresenceWeight: 0.1,
+  headPoseWeight: 0.6, // Head pose is the most reliable signal
+  gazeWeight: 0.2, // Gaze data is noisy, reduce its impact
+  facePresenceWeight: 0.2, // Face not detected = definitely distracted
   yawThresholdDeg: 30,
   pitchThresholdDeg: 25,
-  gazeThresholdDeg: 25,
-  emaAlpha: 0.15,
-  dropThreshold: 8,
-  recoverThreshold: 5,
+  gazeThresholdDeg: 30, // Wider tolerance for noisy gaze data
+  emaAlpha: 0.15, // Kept for backward compatibility
+  dropThreshold: 8, // Kept for backward compatibility
+  recoverThreshold: 5, // Kept for backward compatibility
 };
 
 // ---------------------------------------------------------------------------
@@ -95,10 +106,12 @@ export function extractFocusInput(result: DetectionResult | null): FocusInput {
     };
   }
 
+  const bearingDeg = (face.rotation.gaze.bearing * 180) / Math.PI;
+
   return {
     yawDeg: (face.rotation.angle.yaw * 180) / Math.PI,
     pitchDeg: (face.rotation.angle.pitch * 180) / Math.PI,
-    gazeBearingDeg: Math.abs((face.rotation.gaze.bearing * 180) / Math.PI),
+    gazeBearingDeg: Math.abs(bearingDeg - GAZE_CENTER_DEG),
     gazeStrength: face.rotation.gaze.strength,
     faceDetected: true,
   };
@@ -131,12 +144,19 @@ export function computeInstantFocusScore(
   );
   const headPoseScore = (yawScore + pitchScore) / 2;
 
-  // Gaze sub-score: direction score scaled by gaze strength
+  // Gaze sub-score: direction score scaled by effective gaze strength.
+  // gazeStrength from Human.js is a displacement metric (NOT confidence):
+  // low values (0.1-0.3) = looking near center, high values = looking away.
+  // Apply a floor of 0.5 when face is detected to prevent suppression
+  // of the direction score during focused gaze.
   const gazeDirectionScore = Math.max(
     0,
     1 - Math.abs(input.gazeBearingDeg) / config.gazeThresholdDeg
   );
-  const gazeScore = gazeDirectionScore * input.gazeStrength;
+  const effectiveStrength = input.faceDetected
+    ? Math.max(0.5, input.gazeStrength)
+    : 0;
+  const gazeScore = gazeDirectionScore * effectiveStrength;
 
   // Face presence sub-score: binary
   const faceScore = input.faceDetected ? 1 : 0;
