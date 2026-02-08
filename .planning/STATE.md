@@ -1,19 +1,28 @@
 # Project State: FocusFlow
 
 **Last Updated:** 2026-02-08
-**Current Phase:** Phase 4 - Session Management (Plan 2 of 3 complete)
-**Status:** Session UI wired, history/streaks dashboard next
+**Current Phase:** Phase 7 - Fix Face Mesh Color Calibration and Focus Score Accuracy (Plan 1 of 2 complete)
+**Status:** Focus scoring algorithm fixed, face mesh color calibration next
 
 ## Current Milestone
 
-**Milestone:** Core Demo Loop (Phases 1-3) + Session Management (Phase 4)
-**Status:** Phase 4 in progress (2/3 plans complete)
-**Progress:** 3/6 phases complete, phase 4 nearly done
-**Progress bar:** ██████████████░░░░░░ (50% phases, 2/3 P4 plans)
+**Milestone:** Core Demo Loop (Phases 1-3) + Session Management (Phase 4) + Bug Fixes (Phase 7)
+**Status:** Phase 7 in progress (1/2 plans complete)
+**Progress:** 3/6 phases complete, phase 7 plan 1 done
+**Progress bar:** ██████████████░░░░░░ (Phase 7: 1/2 plans)
 
 ## Recent Changes (Last 7 Days)
 
 ### 2026-02-08
+- **Plan 07-01 Complete:** Fix Focus Score Algorithm
+  - Fixed gaze bearing to measure deviation from 90-degree center (GAZE_CENTER_DEG=90)
+  - Rebalanced weights: head=0.6, gaze=0.2, face=0.2
+  - Applied gazeStrength floor of 0.5 when face detected (displacement metric fix)
+  - Widened gazeThresholdDeg from 25 to 30
+  - Implemented sustained distraction timer: 1s eval interval, 3 consecutive seconds required
+  - Score strictly monotonically decreasing (no recovery code path)
+  - Reduced console logging to score-change-only events
+
 - **Plan 04-02 Complete:** Session UI Controls & DetectionProvider Integration
   - SessionControls component with idle CTA, running/paused control bar, wall-clock timer, live metrics
   - SessionTimeline Recharts AreaChart with gradient fill, focus threshold reference line
@@ -34,18 +43,14 @@
   - ElevenLabs Flash v2.5 TTS with server-side caching
   - NudgeIndicator component with tier-colored styling
 
-- **Focus Scoring Refinement:**
-  - Changed to 3-second timer system (score only decreases, starting at 100)
-  - Improved detection thresholds and weights
-
 ### 2026-02-07
 - **Phase 2 Complete:** Focus Scoring & Visualization
 
 ## Active Work
 
-**Current:** Phase 4 - Session Management (Plan 04-03: Session History & Streaks next)
-**Last Completed:** 04-02-PLAN.md (Session UI Controls & DetectionProvider Integration)
-**Next:** Plan 04-03 (SessionHistory list, StreakBadge, PersonalBests, pre-session dashboard)
+**Current:** Phase 7 - Fix Face Mesh Color Calibration (Plan 07-02 next)
+**Last Completed:** 07-01-PLAN.md (Fix Focus Score Algorithm)
+**Next:** Plan 07-02 (Face mesh color calibration: blue/purple during calibration, green-to-red post-calibration)
 **Blocked:** None
 
 ## Technical Debt
@@ -58,9 +63,10 @@
 
 ## Known Issues
 
-- [ ] Score can appear "stuck" momentarily when hysteresis prevents update (by design, but may need UX improvement)
+- [x] ~~Score decreases prematurely when looking at camera~~ (FIXED in 07-01: gaze center, weight rebalance, sustained distraction)
 - [ ] Calibration progress bar animation can lag on slower devices
 - [ ] SpeechSynthesis onend sometimes doesn't fire (10s timeout mitigates this)
+- [ ] Chime recovery logic may need updating for monotonic score model (see 07-RESEARCH.md pitfall 6)
 
 ## Environment Status
 
@@ -84,9 +90,10 @@
 - Phase 4: In progress (2/3 plans, 2026-02-08)
 - Phase 5: Not started (stretch goal)
 - Phase 6: Not started (polish/enhancements)
+- Phase 7: In progress (1/2 plans, 2026-02-08)
 
 **Code Stats:**
-- Total commits: ~20+
+- Total commits: ~25+
 - Active files: ~35
 - API routes: 3 (coaching/generate, coaching/precache, elevenlabs/speak)
 - React hooks: 6 (useWebcamPermission, useHumanDetection, useFocusScore, useFocusChime, useAICoaching, useSessionManager)
@@ -94,9 +101,9 @@
 
 ## Next Steps
 
-1. **Plan 04-03:** Session History & Streaks - SessionHistory list, StreakBadge, PersonalBests, pre-session dashboard
-2. **Phase 4 UAT:** End-to-end session lifecycle verification
-3. **Phase 5:** Stretch goals
+1. **Plan 07-02:** Face Mesh Color Calibration - blue/purple during calibration, green-to-red post-calibration
+2. **Plan 04-03:** Session History & Streaks - SessionHistory list, StreakBadge, PersonalBests, pre-session dashboard
+3. **Phase 4 UAT:** End-to-end session lifecycle verification
 
 ## Dependencies
 
@@ -110,24 +117,33 @@
 - Webcam permission required
 - WebGL for TensorFlow.js
 
+## Roadmap Evolution
+
+### Phases Added
+- **[2026-02-08]** Phase 7: Fix Face Mesh Color Calibration and Focus Score Accuracy - addresses critical bugs in color feedback and score stability
+
 ## Decisions Log
 
 ### Recent Decisions
-1. **[2026-02-08]** DetectionProvider only mounted during running/paused phase (dynamic import saves resources when idle)
-2. **[2026-02-08]** Score changes always call onTick; reducer guards on phase=running (paused ticks ignored)
-3. **[2026-02-08]** Timer state lives inside SessionControls only (avoids re-rendering entire tree)
-4. **[2026-02-08]** Dashboard data refreshed on mount and after dismiss (immediate freshness for 04-03)
-5. **[2026-02-08]** useReducer for session state machine (no new dependency, predictable transitions)
-6. **[2026-02-08]** localStorage for session persistence (data < 100KB, no IndexedDB needed)
-7. **[2026-02-08]** Sessions under 60s not persisted (prevents accidental starts polluting history)
-8. **[2026-02-08]** Snapshots downsampled to 120 points for storage (one per ~30s for 60-min session)
-9. **[2026-02-08]** Reset functions preserve calibration and audio cache (expensive to regenerate)
-10. **[2026-02-08]** Phase 6 added: Polish & Visual Enhancements - dynamic face mesh color based on focus score
-11. **[2026-02-08]** Focus score only decreases (no increase) - simpler "survival mode"
-12. **[2026-02-08]** 3-second discrete timer instead of continuous smoothing - more predictable
-13. **[2026-02-08]** Escalation persists across session (resets only on sustained high focus)
-14. **[2026-02-08]** Pre-cache audio on session start (fire-and-forget, non-blocking)
-15. **[2026-02-07]** Head pose weighted higher than gaze (70% vs 20%) - reliability over accuracy
+1. **[2026-02-08]** GAZE_CENTER_DEG=90: Human.js gaze bearing centered at PI/2 radians, deviation measured from center
+2. **[2026-02-08]** gazeStrength floored at 0.5 when face detected (displacement metric, not confidence)
+3. **[2026-02-08]** Weights rebalanced: head=0.6, gaze=0.2, face=0.2 (head pose most reliable)
+4. **[2026-02-08]** DISTRACTED_THRESHOLD=45 (safe distance from natural focused baseline of 70-95)
+5. **[2026-02-08]** EVAL_INTERVAL_MS=1000 with SUSTAINED_SECONDS_REQUIRED=3 (1s evals, 3s sustained before penalty)
+6. **[2026-02-08]** DetectionProvider only mounted during running/paused phase (dynamic import saves resources when idle)
+7. **[2026-02-08]** Score changes always call onTick; reducer guards on phase=running (paused ticks ignored)
+8. **[2026-02-08]** Timer state lives inside SessionControls only (avoids re-rendering entire tree)
+9. **[2026-02-08]** Dashboard data refreshed on mount and after dismiss (immediate freshness for 04-03)
+10. **[2026-02-08]** useReducer for session state machine (no new dependency, predictable transitions)
+11. **[2026-02-08]** localStorage for session persistence (data < 100KB, no IndexedDB needed)
+12. **[2026-02-08]** Sessions under 60s not persisted (prevents accidental starts polluting history)
+13. **[2026-02-08]** Snapshots downsampled to 120 points for storage (one per ~30s for 60-min session)
+14. **[2026-02-08]** Reset functions preserve calibration and audio cache (expensive to regenerate)
+15. **[2026-02-08]** Phase 6 added: Polish & Visual Enhancements - dynamic face mesh color based on focus score
+16. **[2026-02-08]** Focus score only decreases (no increase) - simpler "survival mode"
+17. **[2026-02-08]** Escalation persists across session (resets only on sustained high focus)
+18. **[2026-02-08]** Pre-cache audio on session start (fire-and-forget, non-blocking)
+19. **[2026-02-07]** Head pose weighted higher than gaze (70% vs 20%) - reliability over accuracy
 
 ### Historical Decisions
 - Chose Human.js over MediaPipe (browser-native, no backend)
@@ -138,9 +154,9 @@
 ## Session Continuity
 
 **Last session:** 2026-02-08
-**Stopped at:** Completed 04-02-PLAN.md
-**Resume:** .planning/phases/04-session-management-session-management/04-03-PLAN.md
+**Stopped at:** Completed 07-01-PLAN.md
+**Resume:** .planning/phases/07-fix-face-mesh-color-calibration-and-focus-score-accuracy/07-02-PLAN.md
 
 ---
 *Updated: 2026-02-08*
-*Status: Phase 4 In Progress (2/3 plans complete)*
+*Status: Phase 7 In Progress (1/2 plans complete)*
