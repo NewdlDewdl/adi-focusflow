@@ -19,6 +19,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 5: Blockchain Rewards (Stretch)** - Solana devnet token minting as optional gamification layer
 - [ ] **Phase 6: Polish & Visual Enhancements** - Dynamic face mesh color feedback and UI refinements
 - [ ] **Phase 7: Fix Face Mesh Color Calibration and Focus Score Accuracy** - Correct calibration gradient (blue/purple), post-calibration baseline (green with yellow/orange/red misalignment feedback), and fix premature score decreases
+- [ ] **Phase 8: Warm Theme UI Migration** - Migrate warm theme visual design (color palette, gradients, glass morphism, typography) from /warm to main page while preserving video detection
+- [ ] **Phase 9: Warm Interactive Elements & Testing** - Add Navigation tabs, Analytics toggle, and comprehensive E2E testing for warm theme
 
 ## Phase Details
 
@@ -132,10 +134,43 @@ Plans:
 - [ ] 07-01-PLAN.md -- Fix gaze bearing center, rebalance scoring weights, implement sustained distraction timer
 - [ ] 07-02-PLAN.md -- Fix calibration/post-calibration colors, fix chime recovery for monotonic score
 
+### Phase 8: Warm Theme UI Migration
+
+**Goal**: Transform the main landing page (localhost:3000) to use the warm beige theme from /warm while preserving all video detection functionality
+**Depends on**: Phase 7
+**Requirements**: UI styling migration
+**Success Criteria** (what must be TRUE):
+  1. Landing page displays warm beige/cream background (#FDFBF7) with animated gradient blobs
+  2. Glass morphism effects applied to UI cards with backdrop-blur
+  3. Typography uses serif font for headings with warm color palette (coral/terracotta accents)
+  4. All text uses dark brown (#43302B) with good contrast
+  5. Video detection system remains completely untouched and functional
+  6. Playwright tests verify video detection integrity after theme migration
+**Plans**: 1 plan
+
+Plans:
+- [ ] 08-01-PLAN.md -- Create warm theme CSS module, update Hero component, migrate color palette, add animations and glass effects
+
+### Phase 9: Warm Interactive Elements & Testing
+
+**Goal**: Complete warm theme migration by adding navigation tabs and analytics toggle with comprehensive E2E testing
+**Depends on**: Phase 8
+**Requirements**: Interactive UI components
+**Success Criteria** (what must be TRUE):
+  1. Navigation tabs (Solo/Multiplayer/Dashboard) display with glass morphism at top center
+  2. Analytics toggle positioned at top left with warm green active state
+  3. All interactive elements use warm theme colors with hover effects
+  4. Comprehensive Playwright test suite verifies entire warm theme integration
+  5. Video detection remains completely functional
+**Plans**: 1 plan
+
+Plans:
+- [ ] 09-01-PLAN.md -- Create Navigation and AnalyticsToggle components, add comprehensive E2E tests
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -146,3 +181,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 5. Blockchain Rewards (Stretch) | 0/TBD | Not started | - |
 | 6. Polish & Visual Enhancements | 0/TBD | Not started | - |
 | 7. Fix Face Mesh Color Calibration and Focus Score Accuracy | 0/2 | Not started | - |
+| 8. Warm Theme UI Migration | 0/1 | Planned | - |
+| 9. Warm Interactive Elements & Testing | 0/1 | Planned | - |

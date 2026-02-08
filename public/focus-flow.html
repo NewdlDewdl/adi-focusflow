@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Flow - Single Page App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link href="https://api.fontshare.com/v2/css?f[]=zodiak@700&f[]=plus-jakarta-sans@400,500,600,700&f[]=jetbrains-mono@400&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes float-delayed {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        @keyframes scan-warm {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        .animate-float-delayed {
+            animation: float-delayed 7s ease-in-out infinite;
+        }
+        .animate-scan {
+            animation: scan-warm 3s linear infinite;
+        }
+        @keyframes slide-in-left {
+            0% { opacity: 0; transform: translateX(-10px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes active-pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 2px 8px rgba(67,48,43,0.08); }
+            50% { transform: scale(1.03); box-shadow: 0 4px 12px rgba(67,48,43,0.15); }
+        }
+
+        /* Organic Glass */
+        .glass-organic {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Texture Overlay */
+        .bg-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+        #hero-title {
+            background-image: radial-gradient(circle 250px at var(--x, 50%) var(--y, 50%), #C06C4C 0%, #43302B 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .animate-shimmer {
+            background: linear-gradient(to right, #9C8F8B 0%, #9C8F8B 40%, #C06C4C 50%, #E8DCC4 55%, #C06C4C 60%, #9C8F8B 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 2s linear infinite;
+        }
+        @keyframes gradient-sweep {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        .animate-gradient-sweep {
+            background: linear-gradient(90deg, #E07856, #F29E85, #E07856);
+            background-size: 200% auto;
+            animation: gradient-sweep 3s linear infinite;
+        }
+
+        /* Visualizer Animations */
+        @keyframes bar-breathe {
+            0%, 100% { height: 6px; opacity: 0.4; }
+            50% { height: 10px; opacity: 0.7; }
+        }
+        @keyframes bar-active {
+            0%, 100% { height: 10px; opacity: 0.5; }
+            50% { height: 28px; opacity: 1; }
+        }
+        .visualizer-bar {
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(to top, #E07856, #F29E85);
+            border-radius: 99px;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            transition: all 0.3s ease;
+        }
+        .visualizer-idle .visualizer-bar {
+            animation: bar-breathe 2s ease-in-out infinite;
+        }
+        .visualizer-active .visualizer-bar {
+            animation: bar-active 0.8s ease-in-out infinite;
+        }
+
+        /* Transition Utilities */
+        .state-transition {
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .fade-out-up {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+        }
+        .fade-in {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .hidden-layout {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- min-h-screen = full viewport height -->
+    <div class="min-h-screen bg-[#FDFBF7] text-[#43302B] flex flex-col items-center justify-center relative overflow-hidden font-['Plus_Jakarta_Sans'] selection:bg-[#C06C4C]/20 selection:text-[#43302B]">
+
+        <!-- Analytics Toggle (Always Visible) -->
+        <div class="absolute top-6 left-6 z-50 flex items-center gap-3">
+            <span class="text-xs font-medium tracking-widest text-[#8D7F7D]">ANALYTICS</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" value="" class="sr-only peer" checked>
+                <div class="w-11 h-6 bg-[#6F7D65] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#FDFBF7] after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#C06C4C]"></div>
+            </label>
+        </div>
+
+        <!-- Mode Selector Nav (Landing Only) -->
+        <nav id="mode-selector" class="absolute top-4 left-1/2 -translate-x-1/2 z-50 glass-organic rounded-full px-1 py-1 flex items-center gap-1 shadow-lg shadow-[#43302B]/5 border border-white/60 state-transition">
+            <button class="flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-medium text-[#43302B] bg-[#FDFBF7] border border-[#EBE5DA] transition-all duration-300 hover:scale-105" style="animation: slide-in-left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s backwards, active-pulse 3s ease-in-out infinite 0.7s">
+                Solo
+            </button>
+            <button class="flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-medium text-[#8D7F7D] hover:text-[#5D524F] hover:bg-[#F2E8DE]/50 transition-all duration-300 hover:scale-105" style="animation: slide-in-left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s backwards">
+                Multiplayer
+            </button>
+            <button class="flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-medium text-[#8D7F7D] hover:text-[#5D524F] hover:bg-[#F2E8DE]/50 transition-all duration-300 hover:scale-105" style="animation: slide-in-left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s backwards">
+                Dashboard
+            </button>
+        </nav>
+
+        <!-- Organic Background Elements -->
+        <div class="absolute inset-0 bg-texture z-0 pointer-events-none mix-blend-multiply"></div>
+        <div class="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-[#E8DCC4] rounded-full blur-[100px] opacity-60 pointer-events-none animate-float"></div>
+        <div class="absolute bottom-[-10%] right-[-5%] w-[700px] h-[700px] bg-[#D8E2DC] rounded-full blur-[120px] opacity-60 pointer-events-none animate-float-delayed"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#F2E8DE] rounded-full blur-[80px] opacity-40 pointer-events-none"></div>
+
+        <!-- Main Content Wrapper -->
+        <main class="relative z-10 w-full max-w-[1280px] flex flex-col items-center px-6 pt-24 pb-4 md:pt-32 md:pb-6 gap-5">
+
+            <!-- Hero Title (Landing Only) -->
+            <div id="hero-header" class="text-center space-y-3 state-transition">
+                <h1 id="hero-title" class="text-6xl md:text-8xl font-bold tracking-tight font-['Zodiak'] drop-shadow-sm cursor-default">
+                    Focus Flow
+                </h1>
+                <p class="text-[#8D7F7D] text-xs md:text-sm tracking-[0.2em] uppercase font-medium">
+                    AI - Powered Focus Tracking
+                </p>
+            </div>
+
+            <!-- Camera Preview Area (Persistent) -->
+            <div id="camera-box" class="relative w-full max-w-5xl aspect-video bg-[#F5F2EB] rounded-[2.5rem] border-[6px] border-[#FFFFFF]/80 ring-1 ring-[#EBE5DA] shadow-[0_20px_40px_-12px_rgba(67,48,43,0.1)] overflow-hidden state-transition">
+
+                <!-- Center Placeholder -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="relative z-10 flex items-center gap-2">
+                        <!-- Status Dot -->
+                        <div class="w-2 h-2 rounded-full bg-[#E07856]"></div>
+                        <span class="font-['Zodiak'] text-lg italic font-medium animate-shimmer pr-1">
+                            OFFLINE
+                        </span>
+                    </div>
+
+                    <!-- Scanning Effect (Warm Light) -->
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#C06C4C]/10 to-transparent h-[100%] w-full animate-scan pointer-events-none"></div>
+                </div>
+
+                <!-- Dot Grid Overlay inside camera -->
+                <div class="absolute inset-0 bg-[radial-gradient(#43302B_1px,transparent_1px)] bg-[size:24px_24px] opacity-[0.03]"></div>
+            </div>
+
+            <!-- Action Area (Buttons & Voice Component) -->
+            <div class="relative w-full max-w-sm h-80 flex flex-col items-center justify-start mt-2">
+
+                <!-- Landing: Start Button -->
+                <button id="btn-start-session" class="absolute top-28 group relative w-full h-12 flex items-center justify-center rounded-full transition-all duration-800 hover:scale-[1.02] cursor-pointer z-20">
+                    <!-- Blur Glow (Behind) -->
+                    <div class="absolute -inset-1 rounded-full opacity-40 blur-md transition-opacity duration-300 group-hover:opacity-70 animate-gradient-sweep"></div>
+                    <!-- Button Background -->
+                    <div class="absolute inset-0 rounded-full animate-gradient-sweep shadow-xl shadow-[#E07856]/20"></div>
+                    <!-- Organic noise overlay -->
+                    <div class="absolute inset-0 bg-texture mix-blend-overlay opacity-30 rounded-full pointer-events-none"></div>
+
+                    <span class="relative z-10 flex items-center justify-center gap-3 text-[#FDFBF7] font-semibold text-base tracking-wide font-['Plus_Jakarta_Sans']">
+                        <iconify-icon icon="lucide:play" class="text-xl"></iconify-icon>
+                        Begin Session
+                    </span>
+                </button>
+
+                <!-- Focus Mode: Voice Input Component -->
+                <div id="voice-component" class="absolute top-0 w-full h-full flex flex-col items-center justify-start pt-10 opacity-0 pointer-events-none transition-all duration-800 z-10">
+
+                    <!-- Visualizer Ring Container -->
+                    <div class="relative flex items-center justify-center w-48 h-48">
+                        <!-- Visualizer Bars (Generated by JS) -->
+                        <div id="visualizer-bars" class="absolute inset-0 visualizer-idle"></div>
+
+                        <!-- Record Button -->
+                        <button id="btn-voice-record" class="relative z-20 w-14 h-14 rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95 group">
+                             <!-- Background -->
+                            <div id="btn-record-bg" class="absolute inset-0 rounded-full bg-gradient-to-r from-[#E07856] to-[#F29E85] shadow-lg shadow-[#E07856]/30"></div>
+                             <!-- Icon -->
+                            <iconify-icon id="btn-record-icon" icon="lucide:radio-receiver" class="relative z-30 text-xl text-[#FDFBF7] drop-shadow-md"></iconify-icon>
+                        </button>
+                    </div>
+
+                    <!-- Timer & Status -->
+                    <div class="flex flex-col items-center gap-1 mt-2 w-full">
+
+                        <div id="status-text" class="text-xs font-medium tracking-widest text-[#8D7F7D] uppercase">Click to focus</div>
+                        <!-- End Session Button -->
+                        <button id="btn-end-session" class="hidden mt-4 group relative w-full h-12 flex items-center justify-center rounded-full transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                            <div class="absolute -inset-1 rounded-full opacity-40 blur-md transition-opacity duration-300 group-hover:opacity-70 animate-gradient-sweep"></div>
+                            <div class="absolute inset-0 rounded-full animate-gradient-sweep shadow-xl shadow-[#E07856]/20"></div>
+                            <div class="absolute inset-0 bg-texture mix-blend-overlay opacity-30 rounded-full pointer-events-none"></div>
+                            <span class="relative z-10 flex items-center justify-center gap-3 text-[#FDFBF7] font-semibold text-base tracking-wide font-['Plus_Jakarta_Sans']">
+                                <iconify-icon icon="lucide:square" class="text-sm fill-current"></iconify-icon>
+                                End Session
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elements
+            const heroTitle = document.getElementById('hero-title');
+            const heroHeader = document.getElementById('hero-header');
+            const nav = document.getElementById('mode-selector');
+            const cameraBox = document.getElementById('camera-box');
+            const btnStart = document.getElementById('btn-start-session');
+            const voiceComponent = document.getElementById('voice-component');
+            const btnVoice = document.getElementById('btn-voice-record');
+            const btnEndSession = document.getElementById('btn-end-session');
+            const visualizerContainer = document.getElementById('visualizer-bars');
+
+            const statusText = document.getElementById('status-text');
+
+            // State
+            let isFocusMode = false;
+            let monitorState = 'idle'; // idle, running, paused
+
+
+            // Cursor Follow Effect
+            if(heroTitle) {
+                document.addEventListener('mousemove', (e) => {
+                    const rect = heroTitle.getBoundingClientRect();
+                    heroTitle.style.setProperty('--x', (e.clientX - rect.left) + 'px');
+                    heroTitle.style.setProperty('--y', (e.clientY - rect.top) + 'px');
+                });
+            }
+
+            // Initialize Visualizer Bars (48 bars)
+            const barCount = 48;
+            for (let i = 0; i < barCount; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'visualizer-bar';
+                // Position bars in a circle: rotate them around center
+                // We translate Y to push them out from center (radius)
+                const rotation = (i / barCount) * 360;
+                bar.style.transform = `rotate(${rotation}deg) translateY(-60px)`; // 60px radius
+                // Randomize animation delay for natural wave
+                bar.style.animationDelay = `-${Math.random() * 2}s`;
+                visualizerContainer.appendChild(bar);
+            }
+
+
+
+            // Enter Focus Mode
+            btnStart.addEventListener('click', () => {
+                isFocusMode = true;
+                monitorState = 'idle';
+
+                // Fade Out Landing Elements
+                heroHeader.classList.add('fade-out-up');
+                nav.classList.add('fade-out-up');
+                btnStart.classList.add('opacity-0', 'pointer-events-none');
+
+                // Fade In Voice Component
+                voiceComponent.classList.remove('opacity-0', 'pointer-events-none');
+                voiceComponent.classList.add('fade-in');
+
+                // Adjust Layout (Collapse header height if needed, but opacity preserves position for camera centering)
+                // For this design, we keep the space to maintain camera position, or we could collapse it.
+                // The user prompt implies keeping camera visible. If we collapse header, camera moves up.
+                heroHeader.style.maxHeight = '0px';
+                heroHeader.style.margin = '0px';
+                heroHeader.style.opacity = '0';
+            });
+
+            // Voice Button Handler (Start / Pause / Resume)
+            btnVoice.addEventListener('click', () => {
+                // Get elements for animation toggling
+                const btnBg = document.getElementById('btn-record-bg');
+                const btnIcon = document.getElementById('btn-record-icon');
+
+                if (monitorState === 'idle') {
+                    // Start Monitoring
+                    monitorState = 'running';
+                    statusText.innerText = "Monitoring...";
+                    statusText.classList.remove('hidden');
+                    statusText.classList.add('text-[#E07856]');
+
+                    visualizerContainer.classList.remove('visualizer-idle');
+                    visualizerContainer.classList.add('visualizer-active');
+
+                    // Enable Animations
+                    btnBg.classList.add('animate-gradient-sweep');
+                    btnIcon.setAttribute('icon', 'lucide:radio-receiver');
+                } else if (monitorState === 'running') {
+                    // Pause
+                    monitorState = 'paused';
+
+                    // Disable Animations & Show Pause Icon
+                    // Animation removed per request
+                    btnIcon.setAttribute('icon', 'lucide:pause');
+
+                    statusText.classList.add('hidden');
+                    btnEndSession.classList.remove('hidden');
+                    visualizerContainer.classList.remove('visualizer-active');
+                    visualizerContainer.classList.remove('visualizer-idle'); // Completely idle
+                } else if (monitorState === 'paused') {
+                    // Resume
+                    monitorState = 'running';
+
+                    // Enable Animations & Show Record Icon
+                    // Animation removed per request
+                    btnIcon.setAttribute('icon', 'lucide:radio-receiver');
+
+                    statusText.classList.remove('hidden');
+                    btnEndSession.classList.add('hidden');
+                    visualizerContainer.classList.remove('visualizer-idle');
+                    visualizerContainer.classList.add('visualizer-active');
+                }
+            });
+
+            // End Session Handler
+            btnEndSession.addEventListener('click', () => {
+                monitorState = 'idle';
+                isFocusMode = false;
+
+                // Reset UI
+                const btnBg = document.getElementById('btn-record-bg');
+                const btnIcon = document.getElementById('btn-record-icon');
+                // Animation cleanup
+                if(btnIcon) btnIcon.setAttribute('icon', 'lucide:radio-receiver');
+
+                statusText.innerText = "Click to focus";
+                statusText.classList.remove('text-[#E07856]', 'hidden');
+                btnEndSession.classList.add('hidden');
+                visualizerContainer.classList.remove('visualizer-active');
+                visualizerContainer.classList.add('visualizer-idle');
+
+                voiceComponent.classList.remove('fade-in');
+                voiceComponent.classList.add('opacity-0', 'pointer-events-none');
+
+                heroHeader.classList.remove('fade-out-up');
+                nav.classList.remove('fade-out-up');
+                btnStart.classList.remove('opacity-0', 'pointer-events-none');
+
+                heroHeader.style.maxHeight = '';
+                heroHeader.style.margin = '';
+                heroHeader.style.opacity = '';
+            });
+        });
+    </script>
+</body>
+</html>

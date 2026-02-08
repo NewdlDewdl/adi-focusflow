@@ -1,0 +1,86 @@
+
+Running 4 tests using 4 workers
+
+[1A[2K[1/4] [chromium] › tests/test-colors.spec.ts:70:7 › Focus Color Visualization › should display color legend
+[1A[2K[2/4] [chromium] › tests/test-colors.spec.ts:4:7 › Focus Color Visualization › should show correct colors throughout the process
+[1A[2K[3/4] [chromium] › tests/video-persistence.spec.ts:4:7 › Video Persistence and Calibration › should show video and calibration on landing page
+[1A[2K[4/4] [chromium] › tests/video-persistence.spec.ts:85:7 › Video Persistence and Calibration › should persist video when entering focus mode
+[1A[2K[chromium] › tests/test-colors.spec.ts:70:7 › Focus Color Visualization › should display color legend
+
+=== COLOR LEGEND ===
+
+[1A[2KScore < 25:   Dark Red    rgba(185, 28, 28, 0.8)
+
+[1A[2KScore 25-50:  Red→Orange  rgba(239, 68, 68, 0.8) → rgba(249, 115, 22, 0.8)
+
+[1A[2KScore 50-75:  Orange→Yellow rgba(249, 115, 22, 0.8) → rgba(234, 179, 8, 0.8)
+
+[1A[2KScore 75-100: Yellow→Green  rgba(234, 179, 8, 0.8) → rgba(34, 197, 94, 0.8)
+
+[1A[2KCalibrating:  Grey        rgba(156, 163, 175, 0.8)
+
+[1A[2K==================
+
+
+[1A[2K[chromium] › tests/video-persistence.spec.ts:4:7 › Video Persistence and Calibration › should show video and calibration on landing page
+Page loaded
+
+[1A[2K✓ Camera container visible
+
+[1A[2K[chromium] › tests/video-persistence.spec.ts:85:7 › Video Persistence and Calibration › should persist video when entering focus mode
+Video elements after transition: 1
+
+[1A[2KVoice control button: ✓ Found
+
+[1A[2K[chromium] › tests/video-persistence.spec.ts:4:7 › Video Persistence and Calibration › should show video and calibration on landing page
+Video element count: 1
+
+[1A[2K✓ Video element visible: true
+
+[1A[2KVideo properties: {
+  srcObject: [33mtrue[39m,
+  readyState: [33m4[39m,
+  videoWidth: [33m1280[39m,
+  videoHeight: [33m720[39m,
+  paused: [33mfalse[39m,
+  muted: [33mtrue[39m,
+  autoplay: [33mtrue[39m
+}
+
+[1A[2KCalibration indicator: ✓ Found
+
+[1A[2KCalibration visible: true
+
+[1A[2KPermission prompt: ✗ Not showing
+
+[1A[2KCanvas element: ✓ Found
+
+[1A[2K✓ Begin Session button visible
+
+[1A[2K
+=== Page HTML (first 2000 chars) ===
+
+[1A[2K<div hidden=""></div><div class="min-h-screen bg-[#FDFBF7] text-[#43302B] flex flex-col items-center justify-center relative overflow-hidden font-['Plus_Jakarta_Sans'] selection:bg-[#C06C4C]/20 selection:text-[#43302B]"><div class="absolute inset-0 bg-texture z-0 pointer-events-none mix-blend-multiply"></div><div class="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-[#E8DCC4] rounded-full blur-[100px] opacity-60 pointer-events-none animate-float"></div><div class="absolute bottom-[-10%] right-[-5%] w-[700px] h-[700px] bg-[#D8E2DC] rounded-full blur-[120px] opacity-60 pointer-events-none animate-float-delayed"></div><div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#F2E8DE] rounded-full blur-[80px] opacity-40 pointer-events-none"></div><nav class="absolute top-4 left-1/2 -translate-x-1/2 z-50 glass-organic rounded-full px-1 py-1 flex items-center gap-1 shadow-lg shadow-[#43302B]/5 border border-white/60 state-transition "><button class="flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-medium text-[#43302B] bg-[#FDFBF7] border border-[#EBE5DA] transition-all duration-300 hover:scale-105">Solo</button><button class="flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-medium text-[#8D7F7D] hover:text-[#5D524F] hover:bg-[#F2E8DE]/50 transition-all duration-300 hover:scale-105">Multiplayer</button><button class="flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-medium text-[#8D7F7D] hover:text-[#5D524F] hover:bg-[#F2E8DE]/50 transition-all duration-300 hover:scale-105">Dashboard</button></nav><main class="relative z-10 w-full max-w-[1280px] flex flex-col items-center px-6 pt-24 pb-4 md:pt-32 md:pb-6 gap-5"><div class="text-center space-y-3 state-transition "><h1 class="hero-title-gradient text-6xl md:text-8xl font-bold tracking-tight drop-shadow-sm cursor-default" style="font-family:Zodiak, serif">Focus Flow</h1><p class="text-[#8D7F7D] text-xs md:text-sm tra
+
+[1A[2K  1) [chromium] › tests/test-colors.spec.ts:4:7 › Focus Color Visualization › should show correct colors throughout the process 
+
+    TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('[data-testid="webcam-view"]') to be visible[22m
+
+
+       8 |     // Wait for the webcam view to appear
+       9 |     const webcamView = page.locator('[data-testid="webcam-view"]');
+    > 10 |     await webcamView.waitFor({ state: 'visible', timeout: 10000 });
+         |                      ^
+      11 |
+      12 |     console.log('\n=== TESTING COLOR CHANGES ===\n');
+      13 |
+        at /Users/adiga/Documents/AIRelated/Projects/FocusForce/tests/test-colors.spec.ts:10:22
+
+    Error Context: test-results/test-colors-Focus-Color-Vi-f047d-lors-throughout-the-process-chromium/error-context.md
+
+
+[1A[2K  1 failed
+    [chromium] › tests/test-colors.spec.ts:4:7 › Focus Color Visualization › should show correct colors throughout the process 
+  3 passed (15.7s)

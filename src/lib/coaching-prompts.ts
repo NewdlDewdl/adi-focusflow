@@ -3,6 +3,7 @@
  * Server-only module (uses process.env.GEMINI_API_KEY).
  */
 
+import "server-only";
 import { GoogleGenAI } from "@google/genai";
 
 export type EscalationTier = "gentle" | "medium" | "direct";

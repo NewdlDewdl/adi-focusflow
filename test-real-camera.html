@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Real Camera</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    video { border: 2px solid #000; }
+    #status { margin-top: 20px; padding: 10px; background: #f0f0f0; }
+  </style>
+</head>
+<body>
+  <h1>Camera Test</h1>
+  <video id="video" width="640" height="480" autoplay playsinline muted></video>
+  <div id="status">Requesting camera...</div>
+  
+  <script>
+    const video = document.getElementById('video');
+    const status = document.getElementById('status');
+    
+    navigator.mediaDevices.getUserMedia({
+      video: {
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        aspectRatio: { ideal: 16 / 9 },
+        facingMode: "user"
+      }
+    })
+    .then(stream => {
+      video.srcObject = stream;
+      const track = stream.getVideoTracks()[0];
+      const settings = track.getSettings();
+      status.innerHTML = `
+        ✅ Camera working!<br>
+        Resolution: ${settings.width}×${settings.height}<br>
+        Aspect Ratio: ${(settings.width / settings.height).toFixed(2)}<br>
+        Frame Rate: ${settings.frameRate} fps
+      `;
+    })
+    .catch(err => {
+      status.innerHTML = `❌ Error: ${err.message}`;
+    });
+  </script>
+</body>
+</html>
