@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
 import type Human from "@vladmandic/human";
 import type { DetectionResult } from "@/lib/detection-types";
 
@@ -28,6 +28,38 @@ export default function WebcamView({
 }: WebcamViewProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [showVideo, setShowVideo] = useState(true);
+
+  // Add event listeners to track video readiness
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleLoadedMetadata = () => {
+      console.log('[WebcamView] Video metadata loaded:', {
+        videoWidth: video.videoWidth,
+        videoHeight: video.videoHeight,
+        readyState: video.readyState,
+      });
+    };
+
+    const handleLoadedData = () => {
+      console.log('[WebcamView] Video data loaded, readyState:', video.readyState);
+    };
+
+    const handleCanPlay = () => {
+      console.log('[WebcamView] Video can play, readyState:', video.readyState);
+    };
+
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    video.addEventListener('loadeddata', handleLoadedData);
+    video.addEventListener('canplay', handleCanPlay);
+
+    return () => {
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      video.removeEventListener('loadeddata', handleLoadedData);
+      video.removeEventListener('canplay', handleCanPlay);
+    };
+  }, [videoRef]);
 
   // Draw detection overlay whenever result changes
   useEffect(() => {
@@ -84,6 +116,7 @@ export default function WebcamView({
           height: video.videoHeight,
         };
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await human.draw.all(canvas, drawResult as any);
       } catch {
         // Fallback: if human.draw fails, draw basic bounding box

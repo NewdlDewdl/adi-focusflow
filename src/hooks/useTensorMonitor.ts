@@ -2,7 +2,6 @@
 
 import { useRef, useEffect, useState } from "react";
 import type Human from "@vladmandic/human";
-import type { PerformanceMetrics } from "@/lib/detection-types";
 
 const DEFAULT_INTERVAL_MS = 5000;
 const WINDOW_SIZE = 10;

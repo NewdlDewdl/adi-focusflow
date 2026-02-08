@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
 import Human from "@vladmandic/human";
 import { humanConfig } from "@/lib/human-config";
 import type { DetectionResult, FaceDetectionData } from "@/lib/detection-types";
@@ -114,6 +114,12 @@ export function useHumanDetection(
       const vid = videoRef.current;
       if (!vid || vid.readyState < 2) {
         // Video not ready yet, retry shortly
+        console.log('[useHumanDetection] Video not ready:', {
+          hasVideo: !!vid,
+          readyState: vid?.readyState,
+          videoWidth: vid?.videoWidth,
+          videoHeight: vid?.videoHeight,
+        });
         if (runningRef.current) {
           setTimeout(detect, DETECT_INTERVAL_MS);
         }
@@ -122,10 +128,16 @@ export function useHumanDetection(
 
       try {
         const res = await human.detect(vid);
+        console.log('[useHumanDetection] Raw detection result:', {
+          faceCount: res.face?.length ?? 0,
+          faces: res.face?.map(f => ({ score: f.score, boxScore: f.boxScore })),
+          videoSize: { width: vid.videoWidth, height: vid.videoHeight },
+        });
         const interpolated = human.next(res);
 
         // Map Human.js result to our DetectionResult type
         const faces: FaceDetectionData[] = (interpolated.face || []).map(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (face: any) => ({
             id: face.id ?? 0,
             score: face.score ?? 0,
