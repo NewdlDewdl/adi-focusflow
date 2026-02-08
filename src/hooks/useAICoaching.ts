@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   canTriggerNudge,
   createNudgeState,
@@ -81,6 +81,7 @@ export function useAICoaching(
   isPlaying: boolean;
   currentTier: EscalationTier | null;
   currentMessage: string | null;
+  reset: () => void;
 } {
   const fullConfig = { ...DEFAULT_COACHING_CONFIG, ...config };
 
@@ -313,7 +314,35 @@ export function useAICoaching(
     };
   }, []);
 
-  return { isPlaying, currentTier, currentMessage };
+  /**
+   * Reset coaching state for a new session.
+   * Clears nudge state, escalation, and playing state.
+   * Does NOT clear pre-cached audio data (expensive to regenerate).
+   */
+  const reset = useCallback(() => {
+    // Stop any playing audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+
+    // Reset nudge state (will be re-initialized when sessionStartTime changes)
+    nudgeStateRef.current = null;
+    isPlayingRef.current = false;
+    hasTriggeredForCurrentChimeSessionRef.current = false;
+    previousChimeCountRef.current = 0;
+    previousSessionStartRef.current = null;
+
+    // Reset reactive state
+    setIsPlaying(false);
+    setCurrentTier(null);
+    setCurrentMessage(null);
+  }, []);
+
+  return { isPlaying, currentTier, currentMessage, reset };
 }
 
 /**
