@@ -102,12 +102,12 @@ Optional features if time permits after core is complete.
 
 ### Blockchain Rewards
 
-- **BLOCK-01**: User can connect Phantom wallet
-- **BLOCK-02**: System mints FOCUS tokens on Solana devnet after session
-- **BLOCK-03**: System awards 1 token per 5 minutes of focused time
-- **BLOCK-04**: System applies bonus multipliers for high scores (>80)
-- **BLOCK-05**: System applies 3x multiplier for active streaks
-- **BLOCK-06**: System gracefully degrades when Solana devnet is unavailable
+- [ ] **BLOCK-01**: User can connect Phantom wallet
+- [ ] **BLOCK-02**: System mints FOCUS tokens on Solana devnet after session
+- [ ] **BLOCK-03**: System awards 1 token per 5 minutes of focused time
+- [ ] **BLOCK-04**: System applies bonus multipliers for high scores (>80)
+- [ ] **BLOCK-05**: System applies 3x multiplier for active streaks
+- [ ] **BLOCK-06**: System gracefully degrades when Solana devnet is unavailable
 
 ## Out of Scope
 
@@ -133,13 +133,63 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| _(To be filled by roadmapper)_ | | |
+| DETECT-01 | Phase 1 | Pending |
+| DETECT-02 | Phase 1 | Pending |
+| DETECT-03 | Phase 1 | Pending |
+| DETECT-04 | Phase 1 | Pending |
+| DETECT-05 | Phase 1 | Pending |
+| DETECT-06 | Phase 1 | Pending |
+| DETECT-07 | Phase 1 | Pending |
+| PERF-01 | Phase 1 | Pending |
+| PERF-02 | Phase 1 | Pending |
+| PERF-03 | Phase 1 | Pending |
+| PERF-04 | Phase 1 | Pending |
+| PERF-05 | Phase 1 | Pending |
+| SCORE-01 | Phase 2 | Pending |
+| SCORE-02 | Phase 2 | Pending |
+| SCORE-03 | Phase 2 | Pending |
+| SCORE-04 | Phase 2 | Pending |
+| SCORE-05 | Phase 2 | Pending |
+| SCORE-06 | Phase 2 | Pending |
+| UI-01 | Phase 2 | Pending |
+| UI-02 | Phase 2 | Pending |
+| UI-03 | Phase 2 | Pending |
+| COACH-01 | Phase 3 | Pending |
+| COACH-02 | Phase 3 | Pending |
+| COACH-03 | Phase 3 | Pending |
+| COACH-04 | Phase 3 | Pending |
+| COACH-05 | Phase 3 | Pending |
+| COACH-06 | Phase 3 | Pending |
+| COACH-07 | Phase 3 | Pending |
+| COACH-08 | Phase 3 | Pending |
+| COACH-09 | Phase 3 | Pending |
+| COACH-10 | Phase 3 | Pending |
+| UI-04 | Phase 3 | Pending |
+| SESSION-01 | Phase 4 | Pending |
+| SESSION-02 | Phase 4 | Pending |
+| SESSION-03 | Phase 4 | Pending |
+| SESSION-04 | Phase 4 | Pending |
+| SESSION-05 | Phase 4 | Pending |
+| SESSION-06 | Phase 4 | Pending |
+| SESSION-07 | Phase 4 | Pending |
+| SESSION-08 | Phase 4 | Pending |
+| SESSION-09 | Phase 4 | Pending |
+| SESSION-10 | Phase 4 | Pending |
+| UI-05 | Phase 4 | Pending |
+| BLOCK-01 | Phase 5 (Stretch) | Pending |
+| BLOCK-02 | Phase 5 (Stretch) | Pending |
+| BLOCK-03 | Phase 5 (Stretch) | Pending |
+| BLOCK-04 | Phase 5 (Stretch) | Pending |
+| BLOCK-05 | Phase 5 (Stretch) | Pending |
+| BLOCK-06 | Phase 5 (Stretch) | Pending |
 
 **Coverage:**
-- v1 requirements: 41 total (36 must-have + 6 stretch)
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 41 ⚠️
+- v1 must-have requirements: 43 total
+- Mapped to phases: 43/43
+- v1 stretch requirements: 6 total
+- Mapped to phases: 6/6 (Phase 5)
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-07*
-*Last updated: 2026-02-07 after initial definition*
+*Last updated: 2026-02-07 after roadmap creation*
