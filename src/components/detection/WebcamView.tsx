@@ -11,7 +11,7 @@ type RGB = [number, number, number];
  * Returns raw numeric tuples for cross-frame lerping.
  */
 function getTargetRGB(score: number, isCalibrated: boolean): RGB {
-  if (!isCalibrated) return [156, 163, 175]; // gray-400
+  if (!isCalibrated) return [100, 80, 220]; // blue-purple (calibration)
 
   if (score < 25) return [185, 28, 28]; // red-700
 
@@ -45,18 +45,18 @@ function lerpRGB(a: RGB, b: RGB, t: number): RGB {
  * Returns { primary: string, secondary: string } for mesh and label colors.
  *
  * Color scheme:
- * - Grey during calibration
+ * - Blue-purple during calibration
  * - Dark red (< 25 score)
  * - Red to orange gradient (25-50)
  * - Orange to yellow gradient (50-75)
  * - Yellow to green gradient (75-100)
  */
 function getFocusColors(score: number, isCalibrated: boolean): { primary: string; secondary: string } {
-  // During calibration, use grey
+  // During calibration, use blue-purple
   if (!isCalibrated) {
     return {
-      primary: 'rgba(156, 163, 175, 0.8)', // gray-400
-      secondary: 'rgba(209, 213, 219, 0.9)', // gray-300
+      primary: 'rgba(100, 80, 220, 0.8)',   // blue-purple
+      secondary: 'rgba(140, 120, 255, 0.9)', // lighter blue-purple
     };
   }
 
@@ -146,7 +146,8 @@ interface WebcamViewProps {
   isLoading: boolean;
   loadingMessage: string;
   fps: number;
-  focusScore: number;
+  focusScore: number; // Display score (3-second averaged)
+  instantScore: number; // Real-time instant score for color changes
   isCalibrated: boolean;
 }
 
@@ -163,10 +164,11 @@ export default function WebcamView({
   loadingMessage,
   fps,
   focusScore,
+  instantScore,
   isCalibrated,
 }: WebcamViewProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const currentColorRef = useRef<RGB>([156, 163, 175]); // Start gray
+  const currentColorRef = useRef<RGB>([100, 80, 220]); // Start blue-purple (calibration)
   const [showVideo, setShowVideo] = useState(true);
 
   // Draw detection overlay whenever result changes
@@ -207,6 +209,7 @@ export default function WebcamView({
       ctx.scale(-1, 1);
 
       // Cross-frame color lerping for smooth transitions
+      // Use focusScore (display score) for smooth, stable color transitions
       const targetRGB = getTargetRGB(focusScore, isCalibrated);
       const cur = currentColorRef.current;
       const lerpFactor = 0.15;
