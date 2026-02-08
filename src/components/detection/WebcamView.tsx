@@ -229,6 +229,7 @@ export default function WebcamView({
           drawPolygons: true,
           drawBoxes: false,
           fillPolygons: false,
+          useDepth: false,
           useCurves: true,
           drawLabels: !isCalibrated,
           font: 'small-caps 13px "Segoe UI"',
