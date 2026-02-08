@@ -90,13 +90,17 @@ export default function DetectionProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Freeze the displayed score when paused (store the score at pause moment)
+  // Freeze the displayed score when paused (capture score only at pause transition)
   const frozenScoreRef = useRef(score);
+  const prevPhaseRef = useRef<"running" | "paused">(sessionPhase);
+
   useEffect(() => {
-    if (sessionPhase === "paused") {
-      // Freeze at current score when entering pause
+    // Only capture the score when transitioning FROM running TO paused
+    if (prevPhaseRef.current === "running" && sessionPhase === "paused") {
       frozenScoreRef.current = score;
+      console.log(`[DetectionProvider] Session paused - freezing score at ${score}`);
     }
+    prevPhaseRef.current = sessionPhase;
   }, [sessionPhase, score]);
 
   // Display score: frozen when paused, live when running
