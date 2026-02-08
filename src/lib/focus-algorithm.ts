@@ -109,11 +109,6 @@ export function extractFocusInput(result: DetectionResult | null): FocusInput {
   const bearingDeg = (face.rotation.gaze.bearing * 180) / Math.PI;
   const gazeBearingDev = Math.abs(bearingDeg - GAZE_CENTER_DEG);
 
-  // DEBUG: Periodically log raw gaze values to verify center
-  if (Math.random() < 0.01) { // ~1% of frames
-    console.log(`[GazeBearing] raw=${bearingDeg.toFixed(1)}°, center=${GAZE_CENTER_DEG}°, deviation=${gazeBearingDev.toFixed(1)}°, strength=${face.rotation.gaze.strength.toFixed(2)}`);
-  }
-
   return {
     yawDeg: (face.rotation.angle.yaw * 180) / Math.PI,
     pitchDeg: (face.rotation.angle.pitch * 180) / Math.PI,

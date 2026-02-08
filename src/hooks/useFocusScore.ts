@@ -43,6 +43,7 @@ export function useFocusScore(
 ): {
   score: number;
   instantScore: number; // Real-time instant score for visual feedback
+  alignmentScore: number; // Real-time alignment score for mesh colors
   history: { time: number; score: number }[];
   config: FocusConfig;
   updateConfig: (partial: Partial<FocusConfig>) => void;
@@ -52,6 +53,7 @@ export function useFocusScore(
 } {
   const [score, setScore] = useState(100); // Start at 100
   const [instantScore, setInstantScore] = useState(100); // Real-time instant score
+  const [alignmentScore, setAlignmentScore] = useState(100); // Real-time alignment score
   const [history, setHistory] = useState<{ time: number; score: number }[]>([]);
   const [config, setConfig] = useState<FocusConfig>({
     ...DEFAULT_FOCUS_CONFIG,
@@ -99,13 +101,13 @@ export function useFocusScore(
     // 3. Compute raw instant score (0-100)
     const instant = computeInstantFocusScore(input, config);
 
-    // DEBUG: Log instant score and input values every ~20 frames
-    if (calibrationFrameCountRef.current % 20 === 0) {
-      console.log(`[InstantScore] score=${instant.toFixed(0)}, yaw=${input.yawDeg.toFixed(1)}, pitch=${input.pitchDeg.toFixed(1)}, gazeBearing=${input.gazeBearingDeg.toFixed(1)}, gazeStrength=${input.gazeStrength.toFixed(2)}`);
-    }
+    // Compute alignment score (0-100) based on current head position
+    // This is for visual feedback only, separate from accumulated focus score
+    const alignmentScore = instant; // Use the instant score as alignment
 
     // Update instant score for real-time visual feedback (colors)
     setInstantScore(instant);
+    setAlignmentScore(alignmentScore);
 
     // 4. Track recent instant scores for averaging (helps reduce noise)
     recentInstantScoresRef.current.push(instant);
@@ -211,8 +213,9 @@ export function useFocusScore(
     consecutiveDistractedRef.current = 0;
     setScore(100);
     setInstantScore(100);
+    setAlignmentScore(100);
     setHistory([]);
   }, []);
 
-  return { score, instantScore, history, config, updateConfig, isCalibrated, calibrationProgress, reset };
+  return { score, instantScore, alignmentScore, history, config, updateConfig, isCalibrated, calibrationProgress, reset };
 }

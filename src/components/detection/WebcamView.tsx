@@ -147,6 +147,7 @@ interface WebcamViewProps {
   loadingMessage: string;
   fps: number;
   focusScore: number; // Display score (3-second averaged)
+  alignmentScore: number; // Real-time alignment score for mesh colors
   instantScore: number; // Real-time instant score for color changes
   isCalibrated: boolean;
 }
@@ -164,6 +165,7 @@ export default function WebcamView({
   loadingMessage,
   fps,
   focusScore,
+  alignmentScore,
   instantScore,
   isCalibrated,
 }: WebcamViewProps) {
@@ -209,8 +211,8 @@ export default function WebcamView({
       ctx.scale(-1, 1);
 
       // Cross-frame color lerping for smooth transitions
-      // Use focusScore (display score) for smooth, stable color transitions
-      const targetRGB = getTargetRGB(focusScore, isCalibrated);
+      // Use alignmentScore for instant head alignment feedback
+      const targetRGB = getTargetRGB(alignmentScore, isCalibrated);
       const cur = currentColorRef.current;
       const lerpFactor = 0.15;
       currentColorRef.current = [
@@ -291,7 +293,7 @@ export default function WebcamView({
     };
 
     drawOverlay();
-  }, [result, humanRef, videoRef, fps, focusScore, isCalibrated]);
+  }, [result, humanRef, videoRef, fps, alignmentScore, isCalibrated]);
 
   // Calculate colors for data attributes (for testing)
   const currentColors = getFocusColors(focusScore, isCalibrated);

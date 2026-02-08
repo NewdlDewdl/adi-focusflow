@@ -51,7 +51,7 @@ export default function DetectionProvider({
   const { numTensors, numBytes, isLeaking } = useTensorMonitor(humanRef);
 
   // Focus scoring pipeline
-  const { score, instantScore, history, config, updateConfig, isCalibrated, calibrationProgress, reset: resetScore } = useFocusScore(result);
+  const { score, instantScore, alignmentScore, history, config, updateConfig, isCalibrated, calibrationProgress, reset: resetScore } = useFocusScore(result);
 
   // Focus chime alert system (plays when score drops significantly)
   // Pass instantScore for recovery detection (display score is monotonic, can't detect recovery)
@@ -162,6 +162,7 @@ export default function DetectionProvider({
               loadingMessage={loadingMessage}
               fps={fps}
               focusScore={displayScore}
+              alignmentScore={alignmentScore} // Real-time alignment score for mesh colors
               instantScore={instantScore} // Real-time score for color changes
               isCalibrated={isCalibrated}
             />

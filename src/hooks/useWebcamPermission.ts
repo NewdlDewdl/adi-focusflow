@@ -22,9 +22,33 @@ export function useWebcamPermission(): PermissionResult {
 
     navigator.permissions
       .query({ name: "camera" as PermissionName })
-      .then((status) => {
+      .then(async (status) => {
         if (status.state === "granted") {
-          setState("granted");
+          // Permission already granted - automatically get the stream
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+              video: {
+                width: { ideal: 640 },
+                height: { ideal: 480 },
+                facingMode: "user",
+              },
+            });
+            streamRef.current = stream;
+            if (videoRef.current) {
+              videoRef.current.srcObject = stream;
+            }
+            setState("granted");
+            setError(null);
+          } catch (err: unknown) {
+            setState("error");
+            if (err instanceof DOMException) {
+              setError(`Camera error: ${err.message}`);
+            } else {
+              setError(
+                `Camera error: ${err instanceof Error ? err.message : "Unknown error"}`
+              );
+            }
+          }
         } else if (status.state === "denied") {
           setState("denied");
           setError(
@@ -35,10 +59,33 @@ export function useWebcamPermission(): PermissionResult {
         }
 
         // Listen for changes (e.g., user changes in browser settings)
-        status.addEventListener("change", () => {
+        status.addEventListener("change", async () => {
           if (status.state === "granted") {
-            setState("granted");
-            setError(null);
+            // Permission was just granted - get the stream
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                  width: { ideal: 640 },
+                  height: { ideal: 480 },
+                  facingMode: "user",
+                },
+              });
+              streamRef.current = stream;
+              if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+              }
+              setState("granted");
+              setError(null);
+            } catch (err: unknown) {
+              setState("error");
+              if (err instanceof DOMException) {
+                setError(`Camera error: ${err.message}`);
+              } else {
+                setError(
+                  `Camera error: ${err instanceof Error ? err.message : "Unknown error"}`
+                );
+              }
+            }
           } else if (status.state === "denied") {
             setState("denied");
             setError(
