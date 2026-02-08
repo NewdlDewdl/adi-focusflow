@@ -7,6 +7,9 @@ import type { StoredSession } from "@/lib/session-types";
 import { loadSessions, calculateStreak, getPersonalBests } from "@/lib/session-storage";
 import SessionControls from "@/components/session/SessionControls";
 import SessionSummary from "@/components/session/SessionSummary";
+import StreakBadge from "@/components/session/StreakBadge";
+import PersonalBests from "@/components/session/PersonalBests";
+import SessionHistory from "@/components/session/SessionHistory";
 
 /**
  * Dynamically import DetectionProvider with SSR disabled.
@@ -42,9 +45,9 @@ interface DashboardData {
  * Session page -- orchestrates the complete session lifecycle.
  *
  * UI states:
- *   idle  -> Show "Start Focus Session" CTA + history placeholder
- *   running/paused -> Show controls + DetectionProvider (webcam + scoring)
- *   ended -> Show SessionSummary overlay
+ *   idle  -> Pre-session dashboard: streak badge, personal bests, CTA, session history
+ *   running/paused -> Control bar + DetectionProvider (webcam + scoring)
+ *   ended -> SessionSummary overlay
  *
  * Detection pipeline is only mounted during running/paused to save resources.
  * beforeunload guard prevents accidental navigation during active sessions.
@@ -176,9 +179,20 @@ export default function SessionPage() {
       </header>
 
       <div className="pt-14">
-        {/* Session Controls - always visible except when summary showing */}
-        {!showSummary && (
-          <div className="px-4 pt-4">
+        {/* Pre-session dashboard (idle state) */}
+        {session.phase === "idle" && !showSummary && (
+          <div className="mx-auto max-w-2xl space-y-6 px-4 pt-6">
+            {/* Streak Badge */}
+            <div className="flex justify-center">
+              <StreakBadge streak={dashboardData?.streak ?? 0} />
+            </div>
+
+            {/* Personal Bests */}
+            {dashboardData && (
+              <PersonalBests bests={dashboardData.personalBests} />
+            )}
+
+            {/* Start CTA */}
             <SessionControls
               phase={session.phase}
               startTime={session.startTime}
@@ -191,40 +205,52 @@ export default function SessionPage() {
               onResume={resume}
               onEnd={handleEnd}
             />
+
+            {/* Too short message */}
+            {tooShortMessage && (
+              <div className="mx-auto max-w-md rounded-lg border border-yellow-800/50 bg-yellow-900/20 px-4 py-2 text-center text-sm text-yellow-400">
+                {tooShortMessage}
+              </div>
+            )}
+
+            {/* Session History */}
+            {dashboardData && (
+              <SessionHistory sessions={dashboardData.sessions} />
+            )}
           </div>
         )}
 
-        {/* Too short message */}
-        {tooShortMessage && (
-          <div className="mx-auto mt-4 max-w-md rounded-lg border border-yellow-800/50 bg-yellow-900/20 px-4 py-2 text-center text-sm text-yellow-400">
-            {tooShortMessage}
-          </div>
-        )}
-
-        {/* Detection pipeline - only mounted during active session */}
-        {isSessionActive && (
-          <DetectionProvider
-            sessionPhase={session.phase as "running" | "paused"}
-            onTick={tick}
-            onDistraction={recordDistraction}
-          />
-        )}
-
-        {/* Idle state: history placeholder */}
-        {session.phase === "idle" && !showSummary && (
-          <div className="mx-auto mt-8 max-w-2xl px-4">
-            <div className="rounded-xl border border-gray-800/50 bg-gray-900/50 p-8 text-center">
-              <p className="text-gray-500">
-                Your session history will appear here.
-              </p>
-              {dashboardData && dashboardData.streak > 0 && (
-                <p className="mt-2 text-sm text-gray-600">
-                  Current streak: {dashboardData.streak} day
-                  {dashboardData.streak !== 1 ? "s" : ""}
-                </p>
-              )}
+        {/* Active session: controls bar + detection pipeline */}
+        {isSessionActive && !showSummary && (
+          <>
+            <div className="px-4 pt-4">
+              <SessionControls
+                phase={session.phase}
+                startTime={session.startTime}
+                pausedAt={session.pausedAt}
+                totalPausedMs={session.totalPausedMs}
+                focusedMs={session.focusedMs}
+                distractionCount={session.distractionCount}
+                onStart={handleStart}
+                onPause={pause}
+                onResume={resume}
+                onEnd={handleEnd}
+              />
             </div>
-          </div>
+
+            {/* Too short message */}
+            {tooShortMessage && (
+              <div className="mx-auto mt-4 max-w-md rounded-lg border border-yellow-800/50 bg-yellow-900/20 px-4 py-2 text-center text-sm text-yellow-400">
+                {tooShortMessage}
+              </div>
+            )}
+
+            <DetectionProvider
+              sessionPhase={session.phase as "running" | "paused"}
+              onTick={tick}
+              onDistraction={recordDistraction}
+            />
+          </>
         )}
 
         {/* Session Summary overlay */}
