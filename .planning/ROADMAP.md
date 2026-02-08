@@ -18,6 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 4: Session Management** - Complete session lifecycle with metrics, history, streaks, and responsive UI
 - [ ] **Phase 5: Blockchain Rewards (Stretch)** - Solana devnet token minting as optional gamification layer
 - [ ] **Phase 6: Polish & Visual Enhancements** - Dynamic face mesh color feedback and UI refinements
+- [ ] **Phase 7: Fix Face Mesh Color Calibration and Focus Score Accuracy** - Correct calibration gradient (blue/purple), post-calibration baseline (green with yellow/orange/red misalignment feedback), and fix premature score decreases
 
 ## Phase Details
 
@@ -113,10 +114,28 @@ Plans:
 Plans:
 - [ ] 06-01-PLAN.md -- Smooth color lerp, conditional metrics hiding, console.log cleanup
 
+### Phase 7: Fix Face Mesh Color Calibration and Focus Score Accuracy
+
+**Goal**: Fix critical issues with face mesh visualization and focus scoring to provide accurate, reliable feedback
+**Depends on**: Phase 6
+**Requirements**: SCORE-01, SCORE-02, SCORE-03, SCORE-05, SCORE-06
+**Success Criteria** (what must be TRUE):
+  1. During calibration, face mesh shows blue/purple gradient (not gray)
+  2. After calibration, face mesh starts green (score=100) and transitions through yellow, orange, red as score decreases
+  3. Score stays at 100 when user looks directly at camera for 30+ seconds
+  4. Score only decreases after 3+ consecutive seconds of sustained distraction
+  5. Score never increases once it has dropped (monotonically decreasing)
+  6. Chime stops when user refocuses, despite display score staying flat
+**Plans:** 2 plans
+
+Plans:
+- [ ] 07-01-PLAN.md -- Fix gaze bearing center, rebalance scoring weights, implement sustained distraction timer
+- [ ] 07-02-PLAN.md -- Fix calibration/post-calibration colors, fix chime recovery for monotonic score
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -126,3 +145,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 4. Session Management | 0/3 | Planned | - |
 | 5. Blockchain Rewards (Stretch) | 0/TBD | Not started | - |
 | 6. Polish & Visual Enhancements | 0/TBD | Not started | - |
+| 7. Fix Face Mesh Color Calibration and Focus Score Accuracy | 0/2 | Not started | - |
