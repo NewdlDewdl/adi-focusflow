@@ -90,6 +90,18 @@ export default function DetectionProvider({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Freeze the displayed score when paused (store the score at pause moment)
+  const frozenScoreRef = useRef(score);
+  useEffect(() => {
+    if (sessionPhase === "paused") {
+      // Freeze at current score when entering pause
+      frozenScoreRef.current = score;
+    }
+  }, [sessionPhase, score]);
+
+  // Display score: frozen when paused, live when running
+  const displayScore = sessionPhase === "paused" ? frozenScoreRef.current : score;
+
   // Feed focus score into session manager on every score change.
   // The session reducer's TICK action guards on phase === "running",
   // so we always call onTick -- the reducer ignores it when paused.
@@ -144,7 +156,7 @@ export default function DetectionProvider({
               isLoading={isLoading}
               loadingMessage={loadingMessage}
               fps={fps}
-              focusScore={score}
+              focusScore={displayScore}
               isCalibrated={isCalibrated}
             />
 
@@ -214,7 +226,7 @@ export default function DetectionProvider({
             />
 
             {/* Focus Score Ring */}
-            <FocusScoreRing score={score} size={200} strokeWidth={12} />
+            <FocusScoreRing score={displayScore} size={200} strokeWidth={12} />
 
             {/* Sparkline */}
             <div className="w-full rounded-lg border border-gray-800 bg-gray-900 p-3">
@@ -227,7 +239,7 @@ export default function DetectionProvider({
             {/* Stat Cards */}
             <div className="w-full">
               <StatCards
-                score={score}
+                score={displayScore}
                 sessionStartTime={detectionReadyRef.current ?? Date.now()}
                 history={history}
               />
