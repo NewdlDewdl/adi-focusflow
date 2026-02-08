@@ -13,7 +13,7 @@ import {
 const MAX_HISTORY_LENGTH = 300;
 
 /** Average instant score below this threshold = distracted */
-const DISTRACTED_THRESHOLD = 45;
+const DISTRACTED_THRESHOLD = 65;
 
 /** Must be distracted this many consecutive evaluations before score drops */
 const SUSTAINED_SECONDS_REQUIRED = 3;
