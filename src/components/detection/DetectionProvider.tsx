@@ -5,7 +5,10 @@ import { useWebcamPermission } from "@/hooks/useWebcamPermission";
 import { useHumanDetection } from "@/hooks/useHumanDetection";
 import { useTensorMonitor } from "@/hooks/useTensorMonitor";
 import { useFocusScore } from "@/hooks/useFocusScore";
+import { useFocusChime } from "@/hooks/useFocusChime";
+import { useAICoaching } from "@/hooks/useAICoaching";
 import PermissionGate from "@/components/detection/PermissionGate";
+import NudgeIndicator from "@/components/coaching/NudgeIndicator";
 import PrivacyIndicator from "@/components/detection/PrivacyIndicator";
 import WebcamView from "@/components/detection/WebcamView";
 import MonitoringPanel from "@/components/detection/MonitoringPanel";
@@ -35,6 +38,21 @@ export default function DetectionProvider() {
   if (isReady && detectionStartRef.current === null) {
     detectionStartRef.current = Date.now();
   }
+
+  // Focus chime alert system (plays when score drops significantly)
+  const { chimeCount } = useFocusChime(score, {
+    dropThreshold: 5,
+    recoveryAmount: 1,
+    chimeIntervalMs: 3000, // Play every 3 seconds
+  });
+
+  // AI voice coaching (activates after 5 chimes)
+  const { isPlaying: isCoachingActive, currentTier, currentMessage } = useAICoaching(
+    score,
+    chimeCount,
+    detectionStartRef.current,
+    { chimesToActivate: 5, cooldownSeconds: 30, enableEscalation: true }
+  );
 
   const faceDetected = result !== null && result.faces.length > 0;
 
@@ -92,6 +110,13 @@ export default function DetectionProvider() {
 
           {/* Right column: Score ring, sparkline, stat cards, sensitivity */}
           <div className="flex flex-col items-center gap-5 lg:w-[320px] lg:shrink-0">
+            {/* AI Coaching Indicator */}
+            <NudgeIndicator
+              isActive={isCoachingActive}
+              tier={currentTier}
+              message={currentMessage}
+            />
+
             {/* Focus Score Ring */}
             <FocusScoreRing score={score} size={200} strokeWidth={12} />
 
