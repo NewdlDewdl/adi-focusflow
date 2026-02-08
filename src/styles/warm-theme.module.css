@@ -1,0 +1,73 @@
+/* Warm Theme CSS Module - Color palette, animations, glass effects */
+
+/* Color Palette (CSS custom properties) */
+.warmRoot {
+  --warm-bg: #FDFBF7;
+  --warm-text: #43302B;
+  --warm-text-muted: #8D7F7D;
+  --warm-accent: #C06C4C;
+  --warm-accent-light: #E07856;
+  --warm-surface: #F5F2EB;
+  --warm-border: #EBE5DA;
+  --warm-green: #6F7D65;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes floatDelayed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes gradientSweep {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animateFloat {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animateFloatDelayed {
+  animation: floatDelayed 10s ease-in-out infinite;
+}
+
+.animateGradientSweep {
+  background: linear-gradient(135deg, #E07856, #C06C4C, #D8A48F);
+  background-size: 200% 200%;
+  animation: gradientSweep 8s ease infinite;
+}
+
+/* Glass Morphism Effect */
+.glassOrganic {
+  background: rgba(253, 251, 247, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Background Texture (subtle noise) */
+.bgTexture {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,0.03) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(0,0,0,0.03) 3px
+    );
+}
+
+/* Transitions */
+.stateTransition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.heroTitle {
+  font-family: Georgia, 'Times New Roman', serif;
+  text-shadow: 0 2px 4px rgba(67, 48, 43, 0.1);
+}

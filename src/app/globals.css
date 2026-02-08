@@ -10,6 +10,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Warm theme color palette */
+  --color-warmBeige: #FDFBF7;
+  --color-warmBrown: #43302B;
+  --color-warmBrownMuted: #8D7F7D;
+  --color-warmCoral: #C06C4C;
+  --color-warmCoralLight: #E07856;
+  --color-warmSurface: #F5F2EB;
+  --color-warmBorder: #EBE5DA;
+  --color-warmGreen: #6F7D65;
 }
 
 @media (prefers-color-scheme: dark) {
