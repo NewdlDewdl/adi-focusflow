@@ -17,6 +17,28 @@ const DetectionProvider = dynamic(
   }
 );
 
-export default function ClientDetectionLoader() {
-  return <DetectionProvider />;
+interface ClientDetectionLoaderProps {
+  sessionPhase: "running" | "paused";
+  onTick: (score: number) => void;
+  onDistraction: () => void;
+}
+
+/**
+ * Dynamic loader for DetectionProvider with SSR disabled.
+ * Note: As of Plan 04-02, the session page imports DetectionProvider
+ * directly via its own dynamic() call. This component is kept for
+ * backward compatibility but is not actively used.
+ */
+export default function ClientDetectionLoader({
+  sessionPhase,
+  onTick,
+  onDistraction,
+}: ClientDetectionLoaderProps) {
+  return (
+    <DetectionProvider
+      sessionPhase={sessionPhase}
+      onTick={onTick}
+      onDistraction={onDistraction}
+    />
+  );
 }
