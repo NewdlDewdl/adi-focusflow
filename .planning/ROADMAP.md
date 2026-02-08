@@ -63,11 +63,11 @@ Plans:
   3. User experiences escalating nudge intensity (gentle to medium to direct) across consecutive distraction events within a session
   4. User sees a visual nudge indicator on screen during voice playback
   5. Application continues delivering nudges (via browser speech fallback) even when ElevenLabs API is unavailable or quota is exhausted
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md -- Coaching engine (timing/escalation logic), Gemini API route, ElevenLabs upgrade with caching
+- [ ] 03-02-PLAN.md -- Rewrite useAICoaching hook, NudgeIndicator component, wire into DetectionProvider
 
 ### Phase 4: Session Management
 **Goal**: Users can run complete focus sessions with start/pause/end lifecycle, review their performance afterward, and track progress over time
@@ -107,6 +107,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Webcam Detection Pipeline | 0/3 | Planned | - |
 | 2. Focus Scoring & Visualization | 3/3 | ✓ Complete | 2026-02-07 |
-| 3. AI Coaching Nudges | 0/TBD | Not started | - |
+| 3. AI Coaching Nudges | 0/2 | Planned | - |
 | 4. Session Management | 0/TBD | Not started | - |
 | 5. Blockchain Rewards (Stretch) | 0/TBD | Not started | - |
